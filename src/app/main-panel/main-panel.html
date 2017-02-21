@@ -5,12 +5,11 @@
 						</div>
 						<div id="workedOutToday">
 							<div class="col-md-8">
-								<p class="workedOutToday__mainText">worked out today: {{ timeWorkedOutToday }}</p>
+								<p class="workedOutToday__mainText">worked out today: {{ timeWorkedOutToday_string }}</p>
 							</div>
 							<div class="col-md-4">
 								<form class="workedOutToday__form">
-									<button md-raised-button color="primary">Start</button>
-									<button md-raised-button color="primary">Stop</button>
+									<button md-raised-button [color]="workedOutToday_buttonColor" (click)="startOrPauseTimer()">{{workedOutToday_buttonTitle}}</button>
 								</form>							
 							</div>
 						</div> <!-- end of regularTimer -->
@@ -26,6 +25,10 @@
 							</div>	
 						</div>	
 						<div class="col-md-12">
+							<hr>
+							<form class="text-center">
+								<button md-button color="primary">Finish working day</button>
+							</form>
 							<hr>
 						</div>												
 					</div> <!--- =================================== end of main Panel =================================== -->
