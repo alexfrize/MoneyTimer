@@ -1,0 +1,15 @@
+ /* ================= New goal ================= */
+#newGoalPanel {
+	padding-top: 60px;
+}
+
+#newGoalPanel__newGoalImage {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+#daysTotal {
+	font-size: 24px;
+	text-align: center;
+}
+

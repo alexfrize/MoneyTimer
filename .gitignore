@@ -6,6 +6,10 @@
 
 # dependencies
 /node_modules
+/server/node_modules 
+
+#Libs/material
+_Material
 
 # IDEs and editors
 /.idea

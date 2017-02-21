@@ -1,0 +1,13 @@
+/* ================= Settings Panel ================= */
+
+#settingsPanel {
+	padding-top: 60px;
+}
+
+#hourlySalry {
+	padding-top: 20px;
+}
+
+.hourlySalary__mainText {
+	padding-top: 10px;
+}

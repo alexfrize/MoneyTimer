@@ -1,0 +1,19 @@
+/* ================= All goals Panel ================= */
+
+#allGoalsPanel {
+	padding-top: 30px;
+}
+.allGoalsPanel__goalElement {
+	margin-top: 10px;
+	padding: 10px;
+	border: 1px solid #673ab7; 
+}
+
+.allGoalsPanel__goalElement_description {
+	font-size: 18px;
+	font-weight: 300;
+}
+
+.allGoalsPanel__goalElement_percent_complete {
+	font-weight: 400;
+}

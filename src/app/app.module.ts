@@ -2,17 +2,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
+import { MainPanelComponent } from 'app/main-panel/main-panel.component';
+import { SettingsPanelComponent } from 'app/settings-panel/settings-panel.component';
+import { NewGoalPanelComponent } from 'app/new-goal-panel/new-goal-panel.component';
+import { AllGoalsPanelComponent } from 'app/all-goals-panel/all-goals-panel.component'
 import { AppComponent } from './app.component';
+import { MaterialModule } from '@angular/material';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainPanelComponent,
+    SettingsPanelComponent,
+    NewGoalPanelComponent,
+    AllGoalsPanelComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    MaterialModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
