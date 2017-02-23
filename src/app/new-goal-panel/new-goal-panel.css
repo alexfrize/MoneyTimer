@@ -8,8 +8,37 @@
 	max-height: 200px;
 }
 
+#newGoalPanel__AddGoal_form {
+	text-align: right;
+	padding-top: 20px;
+}
+
 #daysTotal {
 	font-size: 24px;
 	text-align: center;
 }
 
+.custom-file-upload {
+	margin-top: 20px;
+	width: 140px;
+	height: 40px;
+	border: 1px solid #673ab7;
+	overflow: hidden;
+	cursor: pointer;
+	background: #fff url("assets/img/upload_file_icon.png") center left no-repeat;
+	background-size: contain;
+	border-radius: 3px;
+}
+.custom-file-upload:hover {
+	background: #fff4ff url("assets/img/upload_file_icon.png") center left no-repeat;
+	background-size: contain;
+}
+
+.custom-file-upload__text {
+	padding-top: 8px;
+	padding-left: 26px;
+}
+
+input[type="file"] {
+    display: none;
+}

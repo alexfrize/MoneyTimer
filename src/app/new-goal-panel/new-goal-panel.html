@@ -13,11 +13,25 @@
 								<md-input-container>
 								    <input mdInput placeholder="Price">
 								</md-input-container>
+								<md-input-container>
+								    <input mdInput placeholder="Percent % to use">
+								</md-input-container>
+								<form id="newGoalPanel__AddGoal_form">
+									<button md-raised-button color="primary">Add new goal</button>    
+								</form>
 							</div>
 							<div class="col-md-6">
 								<img class="img-responsive center-block" id="newGoalPanel__newGoalImage" src="assets/img/goal_template_image.png">
 								<form class="text-center">
-									<button md-raised-button color="primary">Load image</button>
+
+									<label for="fileToUpload" class="custom-file-upload">
+									<p class="custom-file-upload__text">
+										Upload file
+									</p>
+									</label>
+									
+									<input id="fileToUpload" type="file" (change)="fileChangeEvent($event)" placeholder="" />
+									
 								</form>								
 							</div>
 
