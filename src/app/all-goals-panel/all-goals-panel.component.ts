@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DragulaService } from '../../../node_modules/ng2-dragula';
 
 @Component({
   selector: 'all-goals-panel',
@@ -28,4 +29,12 @@ export class AllGoalsPanelComponent {
 		  "percentComplete" : "48",
 		},		
 	];
+	constructor (private dragulaService : DragulaService) {
+		dragulaService.drop.subscribe((value) => {
+			// console.log(value);
+			// console.log(`drag: ${value[0]}`);
+   //    		console.log(value.slice(1));
+      		console.log(this.goals);
+		});
+	}
 }

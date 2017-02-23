@@ -4,6 +4,7 @@
 	padding-top: 30px;
 }
 .allGoalsPanel__goalElement {
+	background: white;
 	margin-top: 10px;
 	padding: 10px;
 	border: 1px solid #673ab7; 
@@ -16,4 +17,9 @@
 
 .allGoalsPanel__goalElement_percent_complete {
 	font-weight: 400;
+}
+
+.allGoalsPanel__priority {
+	font-size: 12px;
+	font-weight: 300;
 }

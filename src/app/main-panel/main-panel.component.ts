@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Rx';
 
@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Rx';
   templateUrl: 'main-panel.html',
   styleUrls: ['main-panel.css']
 })
-export class MainPanelComponent {
+export class MainPanelComponent implements OnInit, OnChanges {
 
   private startingTime;
   private endingTime;
@@ -21,6 +21,9 @@ export class MainPanelComponent {
   private TMP = 30; //30$ в час - удалить и импортировать из другого класса
   private workedOutToday_buttonTitle : string = 'Start';
   private workedOutToday_buttonColor : string  = 'warn';
+  
+  @Input() hourlySalary : number;
+
   constructor () {
   	let now = moment().format("HH:mm:ss");
   	console.log(now);
@@ -35,6 +38,11 @@ export class MainPanelComponent {
     // saves current state every 1 minute (60000 ms)
     let saveState_timer = Observable.interval(60000);
     saveState_timer.subscribe(t => this.saveStateToDB());
+  }
+  
+  ngOnChanges() {
+  	this.TMP = this.hourlySalary;
+    console.log("ngOnChanges(): this.hourlySalary==", this.hourlySalary);
   }
 
 /* ========================= Starts timer of working hours ========================= */
@@ -61,8 +69,8 @@ export class MainPanelComponent {
 	  	this.timeWorkedOutToday_milliseconds = moment().diff(this.startingTime) + this.previous_timeWorkedOutToday_milliseconds;
 	  	this.timeWorkedOutToday_string = moment.utc(this.timeWorkedOutToday_milliseconds).format('HH:mm:ss');
   	}
-  	console.log(this.timeWorkedOutToday_string);
-  	console.log("this.ticks",this.ticks);
+  	// console.log(this.timeWorkedOutToday_string);
+  	// console.log("this.ticks",this.ticks);
   }
 
 /* ========================= Updates money timer ========================= */
