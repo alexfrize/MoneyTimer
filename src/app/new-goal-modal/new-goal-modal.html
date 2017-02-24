@@ -1,0 +1,41 @@
+<!--- =================================== New goal Modal =================================== -->
+<h1 md-dialog-title>Add new goal</h1>
+<div id="newGoalPanel">
+	<div md-dialog-content>
+		<div class="col-md-6">
+			<md-input-container>
+			    <input mdInput placeholder="Title">
+			</md-input-container>
+			<br>
+			<md-input-container>
+			    <input mdInput placeholder="Description">
+			</md-input-container>
+			<br>
+			<md-input-container>
+			    <input mdInput placeholder="Price">
+			</md-input-container>
+			<br>
+			<md-input-container>
+			    <input mdInput placeholder="Percent % to use">
+			</md-input-container>
+		</div>
+		<div class="col-md-6">
+			<img class="img-responsive center-block" id="newGoalPanel__newGoalImage" src="assets/img/goal_template_image.png">
+			<form class="text-center">
+				<label for="fileToUpload" class="custom-file-upload">
+				<p class="custom-file-upload__text">
+					Upload file
+				</p>
+				</label>
+				<input id="fileToUpload" type="file" (change)="fileChangeEvent($event)" placeholder="" />
+			</form>								
+		</div>
+	
+	</div>  <!-- end of md-dialog-content -->
+	<div md-dialog-actions>
+		<form id="newGoalPanel__AddGoal_form">
+			<button md-raised-button color="primary" (click)="dialogRef.close('add')">Add new goal</button>
+	  		<button md-raised-button color="primary" (click)="dialogRef.close('close')">Close</button>
+		</form>
+	</div>
+</div> <!--- =================================== End of new goal content part =================================== -->

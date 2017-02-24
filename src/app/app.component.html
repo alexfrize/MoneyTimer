@@ -1,25 +1,17 @@
-
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6">
-					<!--- =================================== Main Panel =================================== -->
-					<main-panel [hourlySalary]="newHourlySalary">
-					</main-panel>
-					<div class="clearfix"></div>
-					<settings-panel (salaryUpdated)="onSalaryUpdated($event)">
-					</settings-panel>
-					
-					<div class="clearfix"></div>					
-					<new-goal-panel>
-					</new-goal-panel>
-				
-				</div>
-				
-				<!--- =================================== Goals Panel =================================== -->
-				<div class="col-md-6">
-					<all-goals-panel>
-					</all-goals-panel>
-
-				</div>
-			</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<!--- =================================== Main Panel =================================== -->
+			<main-panel [hourlySalary]="newHourlySalary">
+			</main-panel>
+			<div class="clearfix"></div>
+			<settings-panel (salaryUpdated)="onSalaryUpdated($event)">
+			</settings-panel>
 		</div>
+		<!--- =================================== Goals Panel =================================== -->
+		<div class="col-md-6">
+			<all-goals-panel>
+			</all-goals-panel>
+		</div>
+	</div>
+</div>

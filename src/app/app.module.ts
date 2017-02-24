@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MainPanelComponent } from 'app/main-panel/main-panel.component';
 import { SettingsPanelComponent } from 'app/settings-panel/settings-panel.component';
-import { NewGoalPanelComponent } from 'app/new-goal-panel/new-goal-panel.component';
+import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.component';
 import { AllGoalsPanelComponent } from 'app/all-goals-panel/all-goals-panel.component'
 import { DragulaService, DragulaModule } from '../../node_modules/ng2-dragula';
 import { AppComponent } from './app.component';
@@ -15,9 +15,10 @@ import { MaterialModule } from '@angular/material';
     AppComponent,
     MainPanelComponent,
     SettingsPanelComponent,
-    NewGoalPanelComponent,
+    NewGoalModalComponent,
     AllGoalsPanelComponent
   ],
+  entryComponents: [NewGoalModalComponent],
   imports: [
     BrowserModule,
     FormsModule,

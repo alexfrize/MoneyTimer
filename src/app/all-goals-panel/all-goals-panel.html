@@ -1,29 +1,27 @@
-					<div id="allGoalsPanel">
-						<h4>Current goals</h4>
-						<div [dragula]='"goalsList"' [dragulaModel]="goals">
-							<div class="allGoalsPanel__goalElement col-md-12" *ngFor="let goal of goals; let i = index">
-									<div class="col-md-4">
-										<img class="center-block img-responsive" src="assets/img/static_proto_img_template.jpg">
-
-									</div>
-									<div class="col-md-8">
-										<h4>{{ goal.goalTitle }} : {{ goal.goalPrice }}$</h4>
-										<p class="allGoalsPanel__priority">
-											Приоритет №{{i+1}}
-										</p>
-										<p class="allGoalsPanel__goalElement_description">
-											{{ goal.goalDescription }}
-										</p>
-										<p class="allGoalsPanel__goalElement_percent_complete">{{goal.percentComplete}}% Complete</p>
-										<md-progress-bar color="primary" [value]="goal.percentComplete"></md-progress-bar>
-
-									</div>
-							</div> 
-						</div>
-						<div class="col-md-12">
-							<form class="text-right">
-								<button md-raised-button color="primary">More goals >></button>
-							</form>
-						</div>
-
-					</div> <!--- =================================== end of goals Panel =================================== -->
+<!--- =================================== All goals Panel =================================== -->
+<div id="allGoalsPanel">
+	<h4>Current goals</h4>
+	<div [dragula]='"goalsList"' [dragulaModel]="goals">
+		<div class="allGoalsPanel__goalElement col-md-12" *ngFor="let goal of goals; let i = index">
+				<div class="col-md-4">
+					<img class="center-block img-responsive" src="assets/img/static_proto_img_template.jpg">
+				</div>
+				<div class="col-md-8">
+					<h4>{{ goal.goalTitle }} : {{ goal.goalPrice }}$</h4>
+					<p class="allGoalsPanel__priority">
+						Приоритет №{{i+1}}
+					</p>
+					<p class="allGoalsPanel__goalElement_description">
+						{{ goal.goalDescription }}
+					</p>
+					<p class="allGoalsPanel__goalElement_percent_complete">{{goal.percentComplete}}% Complete</p>
+					<md-progress-bar color="primary" [value]="goal.percentComplete"></md-progress-bar>
+				</div>
+		</div> 
+	</div>
+	<div class="col-md-12">
+		<form class="text-right">
+			<button md-raised-button color="primary">More goals >></button>
+		</form>
+	</div>
+</div> <!--- =================================== end of all goals Panel =================================== -->

@@ -1,24 +1,27 @@
 <!--- =================================== Settings Panel =================================== -->
-					<div id="settingsPanel">
-						<h4>Settings</h4>
-							<div class="col-md-6">
-								<div id="hourlySalary">
-									<div *ngIf="!editMode">
-										<p class="hourlySalary__mainText text-left">
-											Your hourly salary: {{hourlySalary}}$
-										</p>
-									</div>
-									<form name="hourlySalaryInput" *ngIf="editMode">
-										<md-input-container>
-									    	<input [(ngModel)]="hourlySalary" (keyup)="validateHourlySalary()" name="hourlySalary" mdInput placeholder="Your hourly salary">
-										</md-input-container>
-									</form>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<button md-raised-button color="primary" [disabled]="!salaryValidationIsCorrect" (click)="editSalaryToggle()">{{editSalaryButton_title}}</button>
-							</div>	
-							<div class="col-md-12">
-								<hr>
-							</div>						
-					</div> <!--- =================================== End of settings Panel =================================== -->
+<div id="settingsPanel">
+	<h4>Settings</h4>
+	<div class="col-md-6">
+		<div id="hourlySalary">
+			<div *ngIf="!editMode">
+				<p class="hourlySalary__mainText text-left">
+					Your hourly salary: {{hourlySalary}}$
+				</p>
+			</div>
+			<form name="hourlySalaryInput" *ngIf="editMode">
+				<md-input-container>
+			    	<input [(ngModel)]="hourlySalary" (keyup)="validateHourlySalary()" name="hourlySalary" mdInput placeholder="Your hourly salary">
+				</md-input-container>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<button md-raised-button color="primary" [disabled]="!salaryValidationIsCorrect" (click)="editSalaryToggle()">{{editSalaryButton_title}}</button>
+	</div>	
+	<div class="col-md-12">
+		<hr>
+		<form class="text-center">
+			<button md-raised-button color="primary" (click)="openNewGoalModal()">Add new goal</button>    
+		</form>
+	</div>						
+</div> <!--- =================================== End of settings Panel =================================== -->

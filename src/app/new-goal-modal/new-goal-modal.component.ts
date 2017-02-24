@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 @Component({
-  selector: 'new-goal-panel',
-  templateUrl: 'new-goal-panel.html',
-  styleUrls: ['new-goal-panel.css']
+  selector: 'new-goal-modal',
+  templateUrl: 'new-goal-modal.html',
+  styleUrls: ['new-goal-modal.css']
 })
 
-export class NewGoalPanelComponent {
+export class NewGoalModalComponent {
 	private filesToUpload : Array<File> = [];
+
+	constructor(public dialogRef: MdDialogRef<NewGoalModalComponent>) {
+
+	}
 
 /* ========================= Analyze the file information before upload ========================= */		
   fileChangeEvent(fileInput: any){
