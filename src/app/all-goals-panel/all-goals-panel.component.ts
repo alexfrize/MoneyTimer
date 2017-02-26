@@ -31,9 +31,6 @@ export class AllGoalsPanelComponent {
 	];
 	constructor (private dragulaService : DragulaService) {
 		dragulaService.drop.subscribe((value) => {
-			// console.log(value);
-			// console.log(`drag: ${value[0]}`);
-   //    		console.log(value.slice(1));
       		console.log(this.goals);
 		});
 	}

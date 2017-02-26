@@ -1,41 +1,60 @@
 <!--- =================================== New goal Modal =================================== -->
+<form #newGoalForm="ngForm" (ngSubmit)="onSubmitNewGoalForm(newGoalForm.value)">
+
+
+<button md-dialog-close md-raised-button color="primary" class="pull-right">X</button>
 <h1 md-dialog-title>Add new goal</h1>
-<div id="newGoalPanel">
+
 	<div md-dialog-content>
 		<div class="col-md-6">
 			<md-input-container>
-			    <input mdInput placeholder="Title">
+			    <input mdInput placeholder="Title" #goalTitleInput="ngModel" required name="goalTitle" ngModel>
+			</md-input-container>
+			<div [hidden]="goalTitleInput.valid || goalTitleInput.pristine" class="errorText">
+				Please, enter title
+			</div>
+			<br>
+			<md-input-container>
+			    <input mdInput placeholder="Description" name="goalDescription" ngModel>
 			</md-input-container>
 			<br>
 			<md-input-container>
-			    <input mdInput placeholder="Description">
+			    <input mdInput placeholder="Price" #goalPriceInput="ngModel" required name="goalPrice" ngModel pattern="^(\d+|\d+\.\d*)$">
 			</md-input-container>
+			<div *ngIf="goalPriceInput.errors && (goalPriceInput.dirty)">
+				<div [hidden]="!goalPriceInput.errors.required" class="errorText">
+					Please, enter price
+				</div>
+				<div [hidden]="!goalPriceInput.errors.pattern" class="errorText">
+					Please, use only digits (0-9) or dot «.»
+				</div>				
+			</div>
 			<br>
 			<md-input-container>
-			    <input mdInput placeholder="Price">
+			    <input mdInput placeholder="Percent % to save" #percentToSaveInput="ngModel" name="percentToSave" ngModel pattern="^(\d+|\d+\.\d*)$">
 			</md-input-container>
-			<br>
-			<md-input-container>
-			    <input mdInput placeholder="Percent % to use">
-			</md-input-container>
+			<div *ngIf="percentToSaveInput.errors && percentToSaveInput.dirty">
+				<div [hidden]="!percentToSaveInput.errors.pattern" class="errorText">
+					Please, use only digits (0-9) or dot «.»
+				</div>
+			</div>
 		</div>
 		<div class="col-md-6">
 			<img class="img-responsive center-block" id="newGoalPanel__newGoalImage" src="assets/img/goal_template_image.png">
-			<form class="text-center">
+			<div class="text-center">
 				<label for="fileToUpload" class="custom-file-upload">
 				<p class="custom-file-upload__text">
 					Upload file
 				</p>
 				</label>
-				<input id="fileToUpload" type="file" (change)="fileChangeEvent($event)" placeholder="" />
-			</form>								
+				<input id="fileToUpload" type="file" (change)="fileChangeEvent($event)" name="goalImageFile">
+			</div>								
 		</div>
 	
 	</div>  <!-- end of md-dialog-content -->
 	<div md-dialog-actions>
-		<form id="newGoalPanel__AddGoal_form">
-			<button md-raised-button color="primary" (click)="dialogRef.close('add')">Add new goal</button>
-	  		<button md-raised-button color="primary" (click)="dialogRef.close('close')">Close</button>
-		</form>
+		<div id="newGoalPanel__AddGoal_form">
+			<button [disabled]="!newGoalForm.form.valid" md-raised-button color="primary">Add new goal</button>
+		</div>
 	</div>
-</div> <!--- =================================== End of new goal content part =================================== -->
+</form> <!--- =================================== End of new goal content part =================================== -->
