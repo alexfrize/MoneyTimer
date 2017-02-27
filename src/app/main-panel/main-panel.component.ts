@@ -78,8 +78,8 @@ export class MainPanelComponent implements OnInit, OnChanges {
   	let incomePerSecond = this.TMP/3600;
   	this.income = Math.floor(this.timeWorkedOutToday_milliseconds*incomePerSecond/1000);
   	this.totalEarnings = this.income + this.previous_totalEarnings;
-  	console.log(this.timeWorkedOutToday_string);
-  	console.log("income",this.income);
+  	// console.log(this.timeWorkedOutToday_string);
+  	// console.log("income",this.income);
   }
 
 /* ========================= Updates DB, saves current state ========================= */

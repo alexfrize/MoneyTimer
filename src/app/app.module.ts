@@ -9,6 +9,8 @@ import { AllGoalsPanelComponent } from 'app/all-goals-panel/all-goals-panel.comp
 import { DragulaService, DragulaModule } from '../../node_modules/ng2-dragula';
 import { AppComponent } from './app.component';
 import { MaterialModule } from '@angular/material';
+import { ImageCropperComponent } from 'ng2-img-cropper';
+import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-crop-modal.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { MaterialModule } from '@angular/material';
     MainPanelComponent,
     SettingsPanelComponent,
     NewGoalModalComponent,
-    AllGoalsPanelComponent
+    AllGoalsPanelComponent,
+    ImageCropperComponent,
+    ImgCropModalComponent
   ],
   entryComponents: [NewGoalModalComponent],
   imports: [
