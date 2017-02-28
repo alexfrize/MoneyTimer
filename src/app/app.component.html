@@ -5,12 +5,12 @@
 			<main-panel [hourlySalary]="newHourlySalary">
 			</main-panel>
 			<div class="clearfix"></div>
-			<settings-panel (salaryUpdated)="onSalaryUpdated($event)">
+			<settings-panel (salaryUpdated)="onSalaryUpdated($event)" (newGoalAdded)="onNewGoalAdded($event)">
 			</settings-panel>
 		</div>
 		<!--- =================================== Goals Panel =================================== -->
 		<div class="col-md-6">
-			<all-goals-panel>
+			<all-goals-panel [goalObject]="newGoalObject">
 			</all-goals-panel>
 		</div>
 	</div>

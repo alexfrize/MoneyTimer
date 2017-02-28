@@ -13,9 +13,10 @@ export class SettingsPanelComponent implements OnInit {
   private hourlySalary : number;// = 25; //30$ per hour
   private editSalaryButton_title = 'Edit';
   private salaryValidationIsCorrect : boolean = true;
-  private selectedOption: string; // for dialog modal
+  private newGoalObject: any; // for dialog modal
 
   @Output() salaryUpdated : EventEmitter<number> = new EventEmitter<number>();
+  @Output() newGoalAdded : EventEmitter<any> = new EventEmitter<any>();
 
   ngOnInit() {
   	this.hourlySalary = 30;
@@ -52,7 +53,8 @@ export class SettingsPanelComponent implements OnInit {
   	console.log("openNewGoalModal()");
   	let dialogRef = this.dialog.open(NewGoalModalComponent);
     dialogRef.afterClosed().subscribe(result => {
-      this.selectedOption = result;
+      this.newGoalObject = result;
+      if (this.newGoalObject) this.newGoalAdded.emit(this.newGoalObject);
     });
   }
 }

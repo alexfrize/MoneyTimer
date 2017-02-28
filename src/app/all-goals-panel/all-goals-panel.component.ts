@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { DragulaService } from '../../../node_modules/ng2-dragula';
 
 @Component({
@@ -9,6 +9,7 @@ import { DragulaService } from '../../../node_modules/ng2-dragula';
 })
 
 export class AllGoalsPanelComponent {
+	@Input() goalObject : any;
 	private goals = [
 		{ "goalTitle" : "My first goal",
 		  "goalDescription" : "Lorem ipsum dolor sit amet. Ratione nesciunt vero, quaerat debitis nam asperiores pariatur eum.",
@@ -33,5 +34,19 @@ export class AllGoalsPanelComponent {
 		dragulaService.drop.subscribe((value) => {
       		console.log(this.goals);
 		});
+		console.log("from AllGoalsPanelComponent constructor | this.goalObject == ", this.goalObject);
 	}
+
+	ngOnChanges() {
+		if (this.goalObject) {
+			this.goals.push(this.goalObject)
+			this.goalObject = undefined;
+		}
+		console.log("from AllGoalsPanelComponent  ngOnChanges | this.goalObject == ", this.goalObject);
+	}
+
+	getGoalImage(goalObj : any) {
+		return (goalObj.goalImageFile) ? goalObj.goalImageFile : 'assets/img/goal_template_image.png';
+	}
+
 }

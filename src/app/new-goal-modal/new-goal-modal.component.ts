@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
-
 import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-crop-modal.component';
 
 @Component({
@@ -9,14 +8,14 @@ import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-cro
   styleUrls: ['new-goal-modal.css']
 })
 
-
 export class NewGoalModalComponent {
   private newGoalObject : any;
   private goalImageFile : File = undefined;
   private fileToLoad : File = undefined;
-	constructor(private dialogRef: MdDialogRef<NewGoalModalComponent>, public cropmodal: MdDialog) {
+  
+  constructor(private dialogRef: MdDialogRef<NewGoalModalComponent>, public cropmodal: MdDialog) {
 
-	}
+  }
 
 /* ========================= Analyze the file information before upload ========================= */		
   fileChangeEvent($event){
@@ -30,15 +29,17 @@ export class NewGoalModalComponent {
         this.goalImageFile = result;
       });
     }
-    
   }
 
 /* ========================= Event handler on form submit ========================= */    
   onSubmitNewGoalForm(formValue:any) {
     this.newGoalObject = Object.assign({}, formValue);
     this.newGoalObject.goalImageFile = this.goalImageFile;
-    console.log(this.newGoalObject);    
+    if (!this.newGoalObject.percentToSave) {
+    	this.newGoalObject.percentToSave = "100";
+    }
     this.dialogRef.close(this.newGoalObject);
+    
   }  
 
 /* ========================= Returns filename of image preview ========================= */    
