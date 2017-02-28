@@ -12,6 +12,7 @@ import { MaterialModule } from '@angular/material';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-crop-modal.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +23,7 @@ import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-cro
     ImageCropperComponent,
     ImgCropModalComponent
   ],
-  entryComponents: [NewGoalModalComponent],
+  entryComponents: [NewGoalModalComponent, ImgCropModalComponent],
   imports: [
     BrowserModule,
     FormsModule,

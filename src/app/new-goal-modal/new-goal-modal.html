@@ -41,23 +41,15 @@
 		</div>
 		<div class="col-md-6">
 
-			<!-- <img *ngIf="data1.image" class="img-responsive center-block" id="newGoalPanel__newGoalImage" src="assets/img/goal_template_image.png"> -->
+			<img class="img-responsive center-block" id="newGoalPanel__newGoalImage" [src]="getPreviewFilename()">
 			<div class="text-center">
 				
-				<span class="result center-block"  *ngIf="data1.image">
-				    <img [src]="data1.image" 
-				    [width]="200" 
-				    [height]="200">
-				</span>
-			    
-		    	<img-cropper #cropper [image]="data1" [settings]="cropperSettings1"></img-cropper>
-
 				<label for="fileToUpload" class="custom-file-upload">
 				<p class="custom-file-upload__text">
 					Upload file
 				</p>
 				</label>
-				<input id="fileToUpload" type="file" accept="image/*" (change)="fileChangeEvent($event)" name="goalImageFile" ngModel>
+				<input id="fileToUpload" type="file" accept="image/*" (change)="fileChangeEvent($event)">
 			</div>								
 		</div>
 	

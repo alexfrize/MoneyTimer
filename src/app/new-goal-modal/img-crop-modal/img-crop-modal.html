@@ -1,3 +1,15 @@
-<p>
-img-crop-modal COMPONENT
-</p>
+<button md-dialog-close md-raised-button color="primary" class="pull-right">X</button>
+<h1 md-dialog-title>Resize image</h1>
+<div md-dialog-content>
+	<p>
+	   	<img-cropper #cropper [image]="data1" [settings]="cropperSettings1"></img-cropper>
+	   	<span class="result"  *ngIf="data1.image">
+		    <img class="center-block" [src]="data1.image" 
+		    [width]="200" 
+		    [height]="200">
+		</span>
+	</p>
+</div>
+<div md-dialog-footer>
+	<button md-raised-button color="primary" (click)="cropmodal.close(data1.image)">Resize</button>
+</div>
