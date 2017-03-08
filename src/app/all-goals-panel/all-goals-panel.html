@@ -1,21 +1,30 @@
 <!--- =================================== All goals Panel =================================== -->
 <div id="allGoalsPanel">
-	<h4>Current goals</h4>
+	<h4>Current goals (using {{usageOfIncomeInPercents()}}% of income)</h4>
 	<div [dragula]='"goalsList"' [dragulaModel]="goals">
 		<div class="allGoalsPanel__goalElement col-md-12" *ngFor="let goal of goals; let i = index">
-				<div class="col-md-4">
-					<img class="center-block img-responsive" [src]="getGoalImage(goal)">
-				</div>
-				<div class="col-md-8">
-					<h4>{{ goal.goalTitle }} : {{ goal.goalPrice }}$</h4>
-					<p class="allGoalsPanel__priority">
-						Приоритет №{{i+1}}
-					</p>
-					<p class="allGoalsPanel__goalElement_description">
-						{{ goal.goalDescription }}
-					</p>
-					<p class="allGoalsPanel__goalElement_percent_complete">{{goal.percentComplete}}% Complete</p>
-					<md-progress-bar color="primary" [value]="goal.percentComplete"></md-progress-bar>
+				<p (click)="editExistingGoal(goals[i])" class="allGoalsPanel__goalElement__edit-button"><span class="glyphicon glyphicon-pencil"></span></p>
+				<div class="row">
+					<div class="col-md-4">
+						<img class="center-block img-responsive" [src]="getGoalImage(goal)">
+					</div>
+					<div class="col-md-8">
+						<div [ngClass]="isActive_CSSClass(i)">
+
+							<h4>{{ goal.goalTitle }} : {{ goal.goalPrice }}$</h4>
+							<p class="allGoalsPanel__priority">
+								Priority №{{i+1}} | Save {{goal.percentToSave}}% of income 
+							</p>
+							<p class="allGoalsPanel__status">
+								Status: {{isActive(i)}}
+							</p>
+							<p class="allGoalsPanel__goalElement_description">
+								{{ goal.goalDescription }}
+							</p>
+							<p class="allGoalsPanel__goalElement_percent_complete">{{goal.percentComplete}}% Complete</p>
+							<md-progress-bar color="primary" [value]="goal.percentComplete"></md-progress-bar>
+						</div>
+					</div>
 				</div>
 		</div> 
 	</div>

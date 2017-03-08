@@ -34,6 +34,13 @@
 	background-size: contain;
 }
 
+.custom-file-upload, .custom-file-upload:hover {
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
+	transition: 0.5s;	
+}
+
 .custom-file-upload__text {
 	padding-top: 8px;
 	padding-left: 26px;
@@ -48,4 +55,27 @@ input[type="file"] {
 	padding: 0;
 	color: red;
 	font-size: 10px;
+}
+
+.modal__close-button {
+	font-size: 14px;
+	float: right;
+	background: transparent;
+	border: none;
+	outline: 0;
+	color: #673ab7;
+	margin-top: -10px;
+	margin-right: -16px;
+}
+
+.modal__close-button:hover {
+	cursor: pointer;
+	color: #d1c4e9;
+}
+
+.modal__close-button, .modal__close-button:hover {
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
+	transition: 0.5s;
 }

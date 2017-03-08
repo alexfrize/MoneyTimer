@@ -23,3 +23,33 @@
 	font-size: 12px;
 	font-weight: 300;
 }
+
+.allGoalsPanel__status {
+	font-size: 12px;
+	font-weight: 300;
+}
+
+.allGoalsPanel__goalElement_active {
+	color: black;
+}
+
+.allGoalsPanel__goalElement_waiting {
+	color: #ddd;
+}
+
+.allGoalsPanel__goalElement__edit-button {
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
+	transition: 0.5s;
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	font-size: 14px;
+	color: #673ab7;
+}
+
+.allGoalsPanel__goalElement__edit-button:hover {
+	cursor: pointer;
+	color: #d1c4e9;
+}
