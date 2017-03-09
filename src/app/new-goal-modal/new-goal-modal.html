@@ -1,6 +1,5 @@
 <!--- =================================== New goal Modal =================================== -->
-<form #newGoalForm="ngForm" (ngSubmit)="onSubmitNewGoalForm(newGoalForm.value)">
-
+<form [formGroup]="newGoalForm" (ngSubmit)="onSubmitNewGoalForm()">
 
 <button md-dialog-close class="modal__close-button"><span class="glyphicon glyphicon-remove"></span></button>
 <h1 md-dialog-title>Add new goal</h1>
@@ -8,39 +7,36 @@
 	<div md-dialog-content>
 		<div class="col-md-6">
 			<md-input-container>
-			    <input mdInput placeholder="Title" #goalTitleInput="ngModel" required name="goalTitle" ngModel>
+			    <input mdInput placeholder="Title" formControlName="goalTitle">
 			</md-input-container>
-			<div [hidden]="goalTitleInput.valid || goalTitleInput.pristine" class="errorText">
+			<div *ngIf="newGoalForm.controls['goalTitle'].dirty && newGoalForm.controls['goalTitle'].hasError('required')" class="errorText">
 				Please, enter title
-			</div>
+			</div>			
 			<br>
 			<md-input-container>
-			    <input mdInput placeholder="Description" name="goalDescription" ngModel>
+			    <input mdInput placeholder="Description" formControlName="goalDescription">
 			</md-input-container>
 			<br>
 			<md-input-container>
-			    <input mdInput placeholder="Price" #goalPriceInput="ngModel" required name="goalPrice" ngModel pattern="^(\d+|\d+\.\d*)$">
+			    <input mdInput placeholder="Price" formControlName="goalPrice">
 			</md-input-container>
-			<div *ngIf="goalPriceInput.errors && (goalPriceInput.dirty)">
-				<div [hidden]="!goalPriceInput.errors.required" class="errorText">
+			<div *ngIf="newGoalForm.controls['goalPrice'].dirty && newGoalForm.controls['goalPrice'].errors">
+				<div *ngIf="newGoalForm.controls['goalPrice'].hasError('required')" class="errorText">
 					Please, enter price
 				</div>
-				<div [hidden]="!goalPriceInput.errors.pattern" class="errorText">
-					Please, use only digits (0-9) or dot «.»
-				</div>				
-			</div>
-			<br>
-			<md-input-container>
-			    <input mdInput placeholder="Percent % to save" #percentToSaveInput="ngModel" name="percentToSave" ngModel pattern="^(\d+|\d+\.\d*)$">
-			</md-input-container>
-			<div *ngIf="percentToSaveInput.errors && percentToSaveInput.dirty">
-				<div [hidden]="!percentToSaveInput.errors.pattern" class="errorText">
+				<div *ngIf="newGoalForm.controls['goalPrice'].hasError('pattern')" class="errorText">
 					Please, use only digits (0-9) or dot «.»
 				</div>
 			</div>
+			<br>
+			<md-input-container>
+			    <input mdInput placeholder="Percent % to save" formControlName="percentToSave">
+				<div *ngIf="newGoalForm.controls['percentToSave'].hasError('pattern')" class="errorText">
+					Please, use only digits (0-9) or dot «.»
+				</div>			    
+			</md-input-container>
 		</div>
 		<div class="col-md-6">
-
 			<img class="img-responsive center-block" id="newGoalPanel__newGoalImage" [src]="getPreviewFilename()">
 			<div class="text-center">
 				
@@ -52,11 +48,10 @@
 				<input id="fileToUpload" type="file" accept="image/*" (change)="fileChangeEvent($event)">
 			</div>								
 		</div>
-	
 	</div>  <!-- end of md-dialog-content -->
 	<div md-dialog-actions>
 		<div id="newGoalPanel__AddGoal_form">
-			<button [disabled]="!newGoalForm.form.valid" md-raised-button color="primary">Add new goal</button>
+			<button md-raised-button color="primary">Add new goal</button>
 		</div>
 	</div>
 </form> <!--- =================================== End of new goal content part =================================== -->

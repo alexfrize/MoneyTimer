@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MainPanelComponent } from 'app/main-panel/main-panel.component';
 import { SettingsPanelComponent } from 'app/settings-panel/settings-panel.component';
@@ -27,6 +28,7 @@ import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-cro
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     DragulaModule,
     MaterialModule.forRoot()
