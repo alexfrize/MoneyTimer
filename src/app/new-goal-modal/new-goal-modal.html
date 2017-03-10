@@ -1,8 +1,8 @@
 <!--- =================================== New goal Modal =================================== -->
-<form [formGroup]="newGoalForm" (ngSubmit)="onSubmitNewGoalForm()">
+<form [formGroup]="newGoalForm" (ngSubmit)="onSubmitGoalForm()">
 
 <button md-dialog-close class="modal__close-button"><span class="glyphicon glyphicon-remove"></span></button>
-<h1 md-dialog-title>Add new goal</h1>
+<h1 md-dialog-title>{{ modalTitle }}</h1>
 
 	<div md-dialog-content>
 		<div class="col-md-6">
@@ -31,10 +31,10 @@
 			<br>
 			<md-input-container>
 			    <input mdInput placeholder="Percent % to save" formControlName="percentToSave">
-				<div *ngIf="newGoalForm.controls['percentToSave'].hasError('pattern')" class="errorText">
-					Please, use only digits (0-9) or dot «.»
-				</div>			    
 			</md-input-container>
+			<div *ngIf="newGoalForm.controls['percentToSave'].hasError('pattern')" class="errorText">
+				Please, use only digits (0-9) or dot «.» (0-100)
+			</div>			    
 		</div>
 		<div class="col-md-6">
 			<img class="img-responsive center-block" id="newGoalPanel__newGoalImage" [src]="getPreviewFilename()">
@@ -51,7 +51,7 @@
 	</div>  <!-- end of md-dialog-content -->
 	<div md-dialog-actions>
 		<div id="newGoalPanel__AddGoal_form">
-			<button md-raised-button color="primary">Add new goal</button>
+			<button md-raised-button color="primary" [disabled]="!newGoalForm.valid">{{ getButtonTitle() }}</button>
 		</div>
 	</div>
 </form> <!--- =================================== End of new goal content part =================================== -->

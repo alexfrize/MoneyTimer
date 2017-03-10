@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   private newHourlySalary : number;
   private newGoalObject: any = undefined;
+  private editExistingGoalObject: any = undefined;
 /* ========================= When hourlySalary is updated ========================= */
   onSalaryUpdated(newHourlySalary : number) {
   	this.newHourlySalary = newHourlySalary;
@@ -18,5 +19,10 @@ export class AppComponent {
   onNewGoalAdded(newGoalObject : any) {
   	this.newGoalObject = newGoalObject;
   	console.log("==event== newGoalObject : any", newGoalObject);
+  }
+
+  onEditGoalEvent(editExistingGoalObject : any) {
+    this.editExistingGoalObject = editExistingGoalObject;
+    console.log("==event== EDIT GOAL: any", editExistingGoalObject);
   }
 }

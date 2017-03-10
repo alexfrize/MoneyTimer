@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.component';
 
@@ -15,12 +15,13 @@ export class SettingsPanelComponent implements OnInit {
   private salaryValidationIsCorrect : boolean = true;
   private newGoalObject: any; // for dialog modal
 
+  @Input() editExistingGoalObject : any;
   @Output() salaryUpdated : EventEmitter<number> = new EventEmitter<number>();
   @Output() newGoalAdded : EventEmitter<any> = new EventEmitter<any>();
 
   ngOnInit() {
-  	this.hourlySalary = 30;
-  	this.salaryUpdated.emit(this.hourlySalary);
+    this.hourlySalary = 30;
+    this.salaryUpdated.emit(this.hourlySalary);  
   }
 
   validateHourlySalary() {
