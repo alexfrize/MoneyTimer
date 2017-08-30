@@ -1,5 +1,7 @@
-import { Component, Input, Output, OnChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { DragulaService } from '../../../node_modules/ng2-dragula';
+
+import { GoalsService } from '../connect-to-server/goals.service';
 
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.component';
@@ -7,55 +9,48 @@ import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.compone
 @Component({
   selector: 'all-goals-panel',
   templateUrl: 'all-goals-panel.html',
-  styleUrls: ['all-goals-panel.css']
+  styleUrls: ['all-goals-panel.css'],
+  providers: [GoalsService]
 
 })
 
 export class AllGoalsPanelComponent {
 	@Input() goalObject : any;
 
-	private goals = [
-		{ 
-		  "_id" : "some_id1212",
-		  "goalTitle" : "My first goal",
-		  "goalDescription" : "Lorem ipsum dolor sit amet. Ratione nesciunt vero, quaerat debitis nam asperiores pariatur eum.",
-		  "goalPrice": "60",
-		  "percentToSave" : "25",
-		  "percentComplete" : "81"
-		},			
-		{ "_id" : "id_second_goal2094312",
-		  "goalTitle" : "Second goal",
-		  "goalDescription" : "Molestiae ipsum non voluptatibus nulla fugiat sapiente similique! Alias sunt nobis nostrum aut, ratione nesciunt vero, quaerat debitis nam asperiores pariatur eum.",
-		  "goalPrice": "25",
-		  "percentToSave" : "35",
-		  "percentComplete" : "33"
-		},
-		{ "_id" : "s3434ANOTHER",
-		  "goalTitle" : "And another goal",
-		  "goalDescription" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-		  "goalPrice": "118",
-		  "percentToSave" : "20",
-		  "percentComplete" : "48"
-		},		
-	];
-	constructor (public dialog: MdDialog, private dragulaService : DragulaService) {
+	private goals = [];
+
+	constructor (public dialog: MdDialog, private dragulaService : DragulaService, private goalsService : GoalsService) {
 		dragulaService.drop.subscribe((value) => {
       		console.log(this.goals);
 		});
 		console.log("from AllGoalsPanelComponent constructor | this.goalObject == ", this.goalObject);
 	}
 
+	ngOnInit() {
+		
+		this.goalsService.loadAllGoals()
+		.subscribe(
+    		goals => this.goals = goals,
+    		error => console.error(error),
+    		() => console.warn("this.goals === ",this.goals)
+    );
+
+	}
+
 	ngOnChanges() {
 		console.log("from AllGoalsPanelComponent  ngOnChanges | this.goalObject == ", this.goalObject);		
 		if (this.goalObject) {
-			/* === !IMPORTANT: SETTING TEMPORARY _id. REMOVE IT LATER === */
-			this.goalObject._id = '_tmp_id_' + Math.round(Math.random()*1000000); // REMOVE IT LATER
-			/* Sets 0% of complete to a new goal */
-			this.goalObject.percentComplete = 0;
-			this.goals.push(this.goalObject);
+			
+			var goalObjectToSave = Object.assign({
+				_id : '_tmp_id_' + Math.round(Math.random()*1000000), /* === !IMPORTANT: SETTING TEMPORARY _id. REMOVE IT LATER === */
+				percentComplete : 0
+			}, this.goalObject);
+			if (goalObjectToSave.goalImageFile === undefined) delete goalObjectToSave.goalImageFile;
+			this.goals.push(goalObjectToSave);
 			/* === !IMPORTANT: SAVE NEW GOAL, GET AN _id FOR IT === */
 			console.log('Adding new goal object!', this.goalObject._id);
 			console.log('=== !IMPORTANT: SAVE NEW GOAL, GET AN _id FOR IT ===');
+			console.log("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\ngoalObjectToSave ==", goalObjectToSave);
 			this.goalObject = undefined;
 		}
 	

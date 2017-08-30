@@ -20,7 +20,7 @@ export class SettingsPanelComponent implements OnInit {
   @Output() newGoalAdded : EventEmitter<any> = new EventEmitter<any>();
 
   ngOnInit() {
-    this.hourlySalary = 30;
+    this.hourlySalary = 40;
     this.salaryUpdated.emit(this.hourlySalary);  
   }
 
