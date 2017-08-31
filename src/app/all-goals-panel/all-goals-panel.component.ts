@@ -53,6 +53,26 @@ export class AllGoalsPanelComponent {
 			);
 	}
 
+	/* ========================= Saves changes to existing object in DB ========================= */
+	saveGoalChangesToDB(goalObjectToSaveToDB : IGoal) {
+			console.warn("\r\n\r\n\r\ngoalObjectToSaveToDB",goalObjectToSaveToDB);
+		this.goalsService.saveGoalChangesToDB(goalObjectToSaveToDB)
+			.subscribe(
+				result => {
+					//let res = result.json();
+					console.log("RESULT OF PUT: ", result);
+					console.warn("goalObjectToSaveToDB",goalObjectToSaveToDB);
+					/*
+					var goalObjectToSaveToArray = Object.assign({ _id } , goalObjectToSaveToDB)
+					console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
+
+					this.goals.push(goalObjectToSaveToArray);					
+					*/
+				},
+				error => console.warn(error)
+			);
+	}
+
 	ngOnChanges() {
 		console.log("from AllGoalsPanelComponent  ngOnChanges | this.goalObject == ", this.goalObject);		
 		if (this.goalObject) {
@@ -80,6 +100,8 @@ export class AllGoalsPanelComponent {
  		// We don't edit percentComplete property and don't store it in goalObj, so we just save it and restore
  		let tmp_percentComplete = this.goals[foundAtIndex].percentComplete;
  		this.goals[foundAtIndex] = goalObj; 
+ 		console.warn("goalObj===",goalObj);
+ 		this.saveGoalChangesToDB(goalObj);
  		this.goals[foundAtIndex].percentComplete = tmp_percentComplete;
  		console.log("found at ", foundAtIndex);
 		this.goalObject = undefined; 		

@@ -22,7 +22,7 @@ export class GoalsService {
   }
   
   saveGoalToDB(goalObject : IGoal) : Observable<Response> {
-        var _url = "/api/savegoal";
+        var _url = "/api/savenewgoal";
         var headers = new Headers({
           'Content-Type': 'application/json'
         });
@@ -30,11 +30,27 @@ export class GoalsService {
           _url,
           JSON.stringify(goalObject),
           { headers }
-        )
+        ).map(res => res.json())
+        .catch(this.handleError);;
       
   }
+  
+  saveGoalChangesToDB(goalObject : IGoal) : Observable<Response> {
+        var _url = "/api/savegoalchanges";
+        var headers = new Headers({
+          'Content-Type': 'application/json'
+        });
+        console.warn("JSON.stringify(goalObject) ===", JSON.stringify(goalObject));
+        return this._http.put(
+          _url,
+          JSON.stringify(goalObject),
+          { headers }
+        ).catch(this.handleError);
+;
 
-  handleError(error : Response) : void {
+  }
+
+  handleError(error : Response) : any {
     console.error("ERROR: ", error);
   }  
 }
