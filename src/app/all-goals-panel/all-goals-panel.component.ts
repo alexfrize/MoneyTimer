@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angu
 import { DragulaService } from '../../../node_modules/ng2-dragula';
 
 import { GoalsService } from '../connect-to-server/goals.service';
+import { IGoal } from '../connect-to-server/goals.interface';
 
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.component';
@@ -37,20 +38,32 @@ export class AllGoalsPanelComponent {
 
 	}
 
+	/* ========================= Saves object to DB, gets _id and adds new object to goals array ========================= */
+	saveGoalToDBAndAddItToGoalsArray(goalObjectToSaveToDB : IGoal) {
+		this.goalsService.saveGoalToDB(goalObjectToSaveToDB)
+			.subscribe(
+				result => {
+					let _id = result.json();
+					var goalObjectToSaveToArray = Object.assign({ _id } , goalObjectToSaveToDB)
+					console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
+
+					this.goals.push(goalObjectToSaveToArray);					
+				},
+				error => console.error(error)
+			);
+	}
+
 	ngOnChanges() {
 		console.log("from AllGoalsPanelComponent  ngOnChanges | this.goalObject == ", this.goalObject);		
 		if (this.goalObject) {
 			
-			var goalObjectToSave = Object.assign({
-				_id : '_tmp_id_' + Math.round(Math.random()*1000000), /* === !IMPORTANT: SETTING TEMPORARY _id. REMOVE IT LATER === */
+			var goalObjectToSaveToDB = Object.assign({
 				percentComplete : 0
 			}, this.goalObject);
-			if (goalObjectToSave.goalImageFile === undefined) delete goalObjectToSave.goalImageFile;
-			this.goals.push(goalObjectToSave);
-			/* === !IMPORTANT: SAVE NEW GOAL, GET AN _id FOR IT === */
-			console.log('Adding new goal object!', this.goalObject._id);
-			console.log('=== !IMPORTANT: SAVE NEW GOAL, GET AN _id FOR IT ===');
-			console.log("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\ngoalObjectToSave ==", goalObjectToSave);
+			if (goalObjectToSaveToDB.goalImageFile === undefined) delete goalObjectToSaveToDB.goalImageFile;
+
+			this.saveGoalToDBAndAddItToGoalsArray(goalObjectToSaveToDB);
+
 			this.goalObject = undefined;
 		}
 	
