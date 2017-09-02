@@ -9,6 +9,7 @@ export class AppComponent {
   private newHourlySalary : number;
   private newGoalObject: any = undefined;
   private editExistingGoalObject: any = undefined;
+  private showAllGoals = false;
 /* ========================= When hourlySalary is updated ========================= */
   onSalaryUpdated(newHourlySalary : number) {
   	this.newHourlySalary = newHourlySalary;
@@ -25,4 +26,18 @@ export class AppComponent {
     this.editExistingGoalObject = editExistingGoalObject;
     console.log("==event== EDIT GOAL: any", editExistingGoalObject);
   }
+
+  onShowAllGoals_event(showGoalsEventObject : any) {
+    this.showAllGoals = !this.showAllGoals;
+  }
+
+  getLeftColumnCSSClass() {
+    return (!this.showAllGoals) ? "col-md-6" : "display-none";
+  }
+
+  getRightColumnCSSClass() {
+    return (!this.showAllGoals) ? "col-md-6" : "col-md-12";
+  }  
 }
+
+

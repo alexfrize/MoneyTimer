@@ -2,11 +2,12 @@
 <div id="allGoalsPanel">
 	<h4>Current goals (using {{usageOfIncomeInPercents()}}% of income)</h4>
 	<div [dragula]='"goalsList"' [dragulaModel]="goals">
-		<div class="allGoalsPanel__goalElement col-md-12" *ngFor="let goal of goals; let i = index">
+		<div class="col-md-12" *ngFor="let goal of goals; let i = index" >
+		<div *ngIf="showAllGoals || i<3" class="allGoalsPanel__goalElement col-md-12">
 				<p (click)="editExistingGoal(goals[i])" class="allGoalsPanel__goalElement__edit-button"><span class="glyphicon glyphicon-pencil"></span></p>
 				<div class="row">
 					<div class="col-md-4">
-						<img class="center-block img-responsive" [src]="getGoalImage(goal)">
+						<img class="center-block img-responsive allGoalsPanel__goalElement_img" [src]="getGoalImage(goal)">
 					</div>
 					<div class="col-md-8">
 						<div [ngClass]="isActive_CSSClass(i)">
@@ -26,11 +27,12 @@
 						</div>
 					</div>
 				</div>
-		</div> 
+			</div>
+		</div>
 	</div>
-	<div class="col-md-12">
+	<div class="col-md-12 allGoalsPanel__button-container">
 		<form class="text-right">
-			<button md-raised-button color="primary">More goals >></button>
+			<button md-raised-button (click)="showAllGoals_onclick()" color="primary">{{getButtonMoreLessGoalsText()}}</button>
 		</form>
 	</div>
 </div> <!--- =================================== end of all goals Panel =================================== -->

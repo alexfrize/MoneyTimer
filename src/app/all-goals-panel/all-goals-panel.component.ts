@@ -17,8 +17,9 @@ import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.compone
 
 export class AllGoalsPanelComponent {
 	@Input() goalObject : any;
-
+	@Output() showAllGoals_event : EventEmitter<boolean> = new EventEmitter<boolean>();
 	private goals = [];
+	private showAllGoals = false;
 
 	constructor (public dialog: MdDialog, private dragulaService : DragulaService, private goalsService : GoalsService) {
 		dragulaService.drop.subscribe((value) => {
@@ -28,7 +29,6 @@ export class AllGoalsPanelComponent {
 	}
 
 	ngOnInit() {
-		
 		this.goalsService.loadAllGoals()
 		.subscribe(
     		goals => this.goals = goals,
@@ -37,6 +37,16 @@ export class AllGoalsPanelComponent {
     );
 
 	}
+
+	showAllGoals_onclick() {
+		this.showAllGoals = !this.showAllGoals;
+		this.showAllGoals_event.emit(this.showAllGoals);
+	}
+
+	getButtonMoreLessGoalsText() {
+		return (this.showAllGoals) ? "Back to main page >>" : "Show more goals >>"
+	}
+	
 
 	/* ========================= Saves object to DB, gets _id and adds new object to goals array ========================= */
 	saveGoalToDBAndAddItToGoalsArray(goalObjectToSaveToDB : IGoal) {
@@ -59,15 +69,8 @@ export class AllGoalsPanelComponent {
 		this.goalsService.saveGoalChangesToDB(goalObjectToSaveToDB)
 			.subscribe(
 				result => {
-					//let res = result.json();
 					console.log("RESULT OF PUT: ", result);
 					console.warn("goalObjectToSaveToDB",goalObjectToSaveToDB);
-					/*
-					var goalObjectToSaveToArray = Object.assign({ _id } , goalObjectToSaveToDB)
-					console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
-
-					this.goals.push(goalObjectToSaveToArray);					
-					*/
 				},
 				error => console.warn(error)
 			);

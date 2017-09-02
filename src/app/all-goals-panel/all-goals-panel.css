@@ -37,6 +37,10 @@
 	color: #ddd;
 }
 
+.allGoalsPanel__goalElement_img {
+	max-width: 150px;
+}
+
 .allGoalsPanel__goalElement__edit-button {
 	-moz-transition: 0.5s;
 	-webkit-transition: 0.5s;
@@ -52,4 +56,9 @@
 .allGoalsPanel__goalElement__edit-button:hover {
 	cursor: pointer;
 	color: #d1c4e9;
+}
+
+.allGoalsPanel__button-container {
+	margin-top: 10px;
+	margin-bottom: 30px;
 }

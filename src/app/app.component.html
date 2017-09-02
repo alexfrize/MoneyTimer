@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="row">
-		<div class="col-md-6">
+		<div [class]="getLeftColumnCSSClass()">
 			<!--- =================================== Main Panel =================================== -->
 			<main-panel [hourlySalary]="newHourlySalary">
 			</main-panel>
@@ -9,8 +9,8 @@
 			</settings-panel>
 		</div>
 		<!--- =================================== Goals Panel =================================== -->
-		<div class="col-md-6">
-			<all-goals-panel [goalObject]="newGoalObject">
+		<div [class]="getRightColumnCSSClass()">
+			<all-goals-panel [goalObject]="newGoalObject" (showAllGoals_event)="onShowAllGoals_event($event)">
 			</all-goals-panel>
 		</div>
 	</div>
