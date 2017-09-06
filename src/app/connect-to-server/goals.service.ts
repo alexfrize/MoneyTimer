@@ -21,6 +21,7 @@ export class GoalsService {
     .do(data => JSON.stringify(data));
   }
   
+  /* ========================================================================================================== */
   saveGoalToDB(goalObject : IGoal) : Observable<Response> {
         var _url = "/api/savenewgoal";
         var headers = new Headers({
@@ -35,6 +36,7 @@ export class GoalsService {
       
   }
   
+  /* ========================================================================================================== */
   saveGoalChangesToDB(goalObject : IGoal) : Observable<Response> {
         var _url = "/api/savegoalchanges";
         var headers = new Headers({
@@ -46,10 +48,25 @@ export class GoalsService {
           JSON.stringify(goalObject),
           { headers }
         ).catch(this.handleError);
-;
-
   }
 
+  /* ========================================================================================================== */
+  updateAllGoalsIndexesInDB(goalsIndexesArray : IGoal[]) : Observable<Response> {
+        var _url = "/api/updateallgoalsindexes";
+        var headers = new Headers({
+          'Content-Type': 'application/json'
+        });
+        console.warn("JSON.stringify(goalsIndexesArray) ===", JSON.stringify(goalsIndexesArray));
+        
+        return this._http.put(
+          _url,
+          JSON.stringify(goalsIndexesArray),
+          { headers }
+        ).catch(this.handleError);
+       
+  }
+
+  /* ========================================================================================================== */
   handleError(error : Response) : any {
     console.error("ERROR: ", error);
   }  

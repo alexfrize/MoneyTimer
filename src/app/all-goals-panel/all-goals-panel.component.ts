@@ -24,14 +24,46 @@ export class AllGoalsPanelComponent {
 	constructor (public dialog: MdDialog, private dragulaService : DragulaService, private goalsService : GoalsService) {
 		dragulaService.drop.subscribe((value) => {
       		console.log(this.goals);
+      		this.updateIndexes();
 		});
 		console.log("from AllGoalsPanelComponent constructor | this.goalObject == ", this.goalObject);
+	}
+
+	/* ================  Updates indexes (priorities) in DB when element in goals array moves ================ */
+	updateIndexes() {
+		for (let i=0; i < this.goals.length; i++) {
+			console.log("this.goals[i].priority", this.goals[i].priority);
+			this.goals[i].priority = i;
+			console.log("this.goals[i].priority::up", this.goals[i].priority);
+		}
+		this.updateAllGoalsIndexesInDB();
+	}
+
+	/* ================  Saves all goals to database ================ */
+	updateAllGoalsIndexesInDB() {
+		let goalsIndexes = [];
+		for (let goal of this.goals) {
+			goalsIndexes.push({
+				_id : goal._id,
+				priority : goal.priority
+			});
+		}
+		console.log("priorities goalsIndexes[] ==" , goalsIndexes);
+		this.goalsService.updateAllGoalsIndexesInDB(goalsIndexes)
+			.subscribe(
+				result => {
+					console.log("updateAllGoalsIndexesInDB::result == ", result);
+				},
+				error => console.error(error)
+			);		
 	}
 
 	ngOnInit() {
 		this.goalsService.loadAllGoals()
 		.subscribe(
-    		goals => this.goals = goals,
+    		goals => this.goals = goals.sort((a, b) => {
+    			return (a.priority <= b.priority) ? -1 : 1;
+    		}),
     		error => console.error(error),
     		() => console.warn("this.goals === ",this.goals)
     );
@@ -65,7 +97,7 @@ export class AllGoalsPanelComponent {
 
 	/* ========================= Saves changes to existing object in DB ========================= */
 	saveGoalChangesToDB(goalObjectToSaveToDB : IGoal) {
-			console.warn("\r\n\r\n\r\ngoalObjectToSaveToDB",goalObjectToSaveToDB);
+			console.warn("--\r\n\r\n\r\ngoalObjectToSaveToDB",goalObjectToSaveToDB);
 		this.goalsService.saveGoalChangesToDB(goalObjectToSaveToDB)
 			.subscribe(
 				result => {
@@ -137,7 +169,11 @@ export class AllGoalsPanelComponent {
 
 /* ========================= Returns percents of active using income ========================= */
 	editExistingGoal(goalObject : any) {
+		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
+		console.log("=========================");
 		console.log(goalObject);
+		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
+		console.log("=========================");
 		let dialogRef = this.dialog.open(NewGoalModalComponent);
 		dialogRef.componentInstance.loadGoalObject(goalObject);
 	    dialogRef.afterClosed().subscribe(result => {

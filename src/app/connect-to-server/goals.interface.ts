@@ -5,5 +5,6 @@ export interface IGoal {
   goalImageFile : any,
   goalPrice: Number,
   percentToSave : Number,
-  percentComplete : Number
+  percentComplete : Number,
+  priority: Number
 }

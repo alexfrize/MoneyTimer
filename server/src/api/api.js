@@ -30,10 +30,8 @@ router.post("/api/savenewgoal", function(req, res) {
 router.put("/api/savegoalchanges", function(req, res) {
   console.log("PUT REQUEST FROM CLIENT");
   var _id = req.body._id;
-  var objToSave = Object.assign({}, req.body);
-  if (objToSave.goalImageFile === undefined) delete objToSave.goalImageFile;
-  console.log("objToSave : ", objToSave);
- 
+  console.log("req.body.priority ==", req.body.priority);
+  console.log("req.body ==", req.body);
   db.goals.update({_id : ObjectId(_id) },
     { 
       $set : { 
@@ -42,10 +40,27 @@ router.put("/api/savegoalchanges", function(req, res) {
         goalPrice: req.body.goalPrice,
         goalImageFile : req.body.goalImageFile,
         percentToSave : req.body.percentToSave,
-        percentComplete : req.body.percentComplete
+        percentComplete : req.body.percentComplete,
+        priority : req.body.priority
       }
     });
   
+  res.send("OK!");
+});
+
+// ============================== Save all goals to database ==============================
+router.put("/api/updateallgoalsindexes", function(req, res) {
+  console.log("UPDATES ALL GOALS INDEXES IN DB");
+  var updatesObjArray = req.body;
+  for (let updateObj of updatesObjArray) {
+    db.goals.update({_id : ObjectId(updateObj._id) },
+      { 
+        $set : { 
+          priority : updateObj.priority
+        }
+      });
+  }
+
   res.send("OK!");
 });
 
