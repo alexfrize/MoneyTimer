@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Rx';
 
@@ -23,6 +23,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private workedOutToday_buttonColor : string  = 'warn';
   
   @Input() hourlySalary : number;
+  @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
 
   constructor () {
   	let now = moment().format("HH:mm:ss");
@@ -34,6 +35,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
     timer.subscribe(t => {
     	this.updateWorkingHours();
     	this.updateMoneyTimer();
+      this.updateTimeWorkedOutToday_event.emit(this.timeWorkedOutToday_milliseconds);
     	this.ticks = t});
     // saves current state every 1 minute (60000 ms)
     let saveState_timer = Observable.interval(60000);

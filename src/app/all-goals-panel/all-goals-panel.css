@@ -41,6 +41,18 @@
 	max-width: 150px;
 }
 
+@media (min-width : 992px ) {
+	.allGoalsPanel__goalElement_img {
+		max-width: 120px;
+	}
+}
+
+@media (min-width : 1200px ) {
+	.allGoalsPanel__goalElement_img {
+		max-width: 150px;
+	}
+}
+
 .allGoalsPanel__goalElement__edit-button {
 	-moz-transition: 0.5s;
 	-webkit-transition: 0.5s;

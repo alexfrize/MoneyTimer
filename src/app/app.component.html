@@ -2,7 +2,7 @@
 	<div class="row">
 		<div [class]="getLeftColumnCSSClass()">
 			<!--- =================================== Main Panel =================================== -->
-			<main-panel [hourlySalary]="newHourlySalary">
+			<main-panel [hourlySalary]="newHourlySalary" (updateTimeWorkedOutToday_event)="onUpdateTimeWorkedOutToday_event($event)">
 			</main-panel>
 			<div class="clearfix"></div>
 			<settings-panel (salaryUpdated)="onSalaryUpdated($event)" (newGoalAdded)="onNewGoalAdded($event)">
@@ -10,7 +10,7 @@
 		</div>
 		<!--- =================================== Goals Panel =================================== -->
 		<div [class]="getRightColumnCSSClass()">
-			<all-goals-panel [goalObject]="newGoalObject" (showAllGoals_event)="onShowAllGoals_event($event)">
+			<all-goals-panel [goalObject]="newGoalObject" [timeWorkedOutToday_milliseconds]="timeWorkedOutToday_milliseconds" (showAllGoals_event)="onShowAllGoals_event($event)">
 			</all-goals-panel>
 		</div>
 	</div>

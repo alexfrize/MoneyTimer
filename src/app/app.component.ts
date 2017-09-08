@@ -7,9 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   private newHourlySalary : number;
+  private timeWorkedOutToday_milliseconds : number;
   private newGoalObject: any = undefined;
   private editExistingGoalObject: any = undefined;
   private showAllGoals = false;
+
 /* ========================= When hourlySalary is updated ========================= */
   onSalaryUpdated(newHourlySalary : number) {
   	this.newHourlySalary = newHourlySalary;
@@ -29,6 +31,10 @@ export class AppComponent {
 
   onShowAllGoals_event(showGoalsEventObject : any) {
     this.showAllGoals = !this.showAllGoals;
+  }
+
+  onUpdateTimeWorkedOutToday_event(timeWorkedOutTodayEventObject : any) {
+    this.timeWorkedOutToday_milliseconds = timeWorkedOutTodayEventObject;
   }
 
   getLeftColumnCSSClass() {

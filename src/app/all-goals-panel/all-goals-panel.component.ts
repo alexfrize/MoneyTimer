@@ -17,7 +17,9 @@ import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.compone
 
 export class AllGoalsPanelComponent {
 	@Input() goalObject : any;
+	@Input() timeWorkedOutToday_milliseconds : number;
 	@Output() showAllGoals_event : EventEmitter<boolean> = new EventEmitter<boolean>();
+	private timeWorkedOutToday_milliseconds_lastSave : number = null;
 	private goals = [];
 	private showAllGoals = false;
 
@@ -25,8 +27,31 @@ export class AllGoalsPanelComponent {
 		dragulaService.drop.subscribe((value) => {
       		console.log(this.goals);
       		this.updateIndexes();
+      		this.updateProgress();
 		});
 		console.log("from AllGoalsPanelComponent constructor | this.goalObject == ", this.goalObject);
+	}
+
+	/* ================  Updates progress bars when element in goals array moves ================ */
+	updateProgress() {
+		console.log("updateProgress()");
+		console.log("ALLGOALS::timeWorkedOutToday_milliseconds ===", this.timeWorkedOutToday_milliseconds);
+		let delta;
+		if (this.timeWorkedOutToday_milliseconds_lastSave !== this.timeWorkedOutToday_milliseconds) {
+			delta = this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave;
+			console.log("delta==", delta);
+			console.log("this.timeWorkedOutToday_milliseconds_lastSave", this.timeWorkedOutToday_milliseconds_lastSave);
+			console.log("this.timeWorkedOutToday_milliseconds", this.timeWorkedOutToday_milliseconds);
+			this.timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
+
+		}
+			
+		for (let goal of this.goals) {
+			goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
+			console.log("goal.percentToSave", goal.percentToSave);
+			console.log("goal.percentComplete", goal.percentComplete);
+		}
+		
 	}
 
 	/* ================  Updates indexes (priorities) in DB when element in goals array moves ================ */
