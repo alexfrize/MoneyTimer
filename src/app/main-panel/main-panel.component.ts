@@ -24,7 +24,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
   
   @Input() hourlySalary : number;
   @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
-
+  @Output() updateProgressBars_event : EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor () {
   	let now = moment().format("HH:mm:ss");
   	console.log(now);
@@ -36,6 +36,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
     	this.updateWorkingHours();
     	this.updateMoneyTimer();
       this.updateTimeWorkedOutToday_event.emit(this.timeWorkedOutToday_milliseconds);
+      this.updateProgressBars_event.emit(true);
     	this.ticks = t});
     // saves current state every 1 minute (60000 ms)
     let saveState_timer = Observable.interval(60000);

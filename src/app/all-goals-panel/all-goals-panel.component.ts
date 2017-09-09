@@ -18,7 +18,10 @@ import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.compone
 export class AllGoalsPanelComponent {
 	@Input() goalObject : any;
 	@Input() timeWorkedOutToday_milliseconds : number;
+	@Input() hourlySalary : number;
+	@Input() updateProgressBar_counter : number;
 	@Output() showAllGoals_event : EventEmitter<boolean> = new EventEmitter<boolean>();
+	private updateProgressBar_counter_prev : number;
 	private timeWorkedOutToday_milliseconds_lastSave : number = null;
 	private goals = [];
 	private showAllGoals = false;
@@ -33,6 +36,7 @@ export class AllGoalsPanelComponent {
 	}
 
 	/* ================  Updates progress bars when element in goals array moves ================ */
+
 	updateProgress() {
 		console.log("updateProgress()");
 		console.log("ALLGOALS::timeWorkedOutToday_milliseconds ===", this.timeWorkedOutToday_milliseconds);
@@ -47,7 +51,15 @@ export class AllGoalsPanelComponent {
 		}
 			
 		for (let goal of this.goals) {
-			goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
+			let t = goal.goalPrice/this.hourlySalary;
+			//goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
+			
+			let salary_ms = this.hourlySalary/(3600*1000); // dollars per 1 ms
+			let dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds; // * KOEFF (don't forget to multiple  to % of_income_koeff)
+			goal.percentComplete = Math.round(dollarsComplete * 100/goal.goalPrice);
+			console.log("===================");
+			console.log("dollarsComplete==",dollarsComplete);
+			console.log(`t== ${t} goal.goalPrice == ${goal.goalPrice}`);
 			console.log("goal.percentToSave", goal.percentToSave);
 			console.log("goal.percentComplete", goal.percentComplete);
 		}
@@ -92,7 +104,6 @@ export class AllGoalsPanelComponent {
     		error => console.error(error),
     		() => console.warn("this.goals === ",this.goals)
     );
-
 	}
 
 	showAllGoals_onclick() {
@@ -145,6 +156,11 @@ export class AllGoalsPanelComponent {
 			this.saveGoalToDBAndAddItToGoalsArray(goalObjectToSaveToDB);
 
 			this.goalObject = undefined;
+		}
+
+		if (this.updateProgressBar_counter !== this.updateProgressBar_counter_prev) {
+			this.updateProgressBar_counter_prev = this.updateProgressBar_counter;
+			this.updateProgress();
 		}
 	
 	}

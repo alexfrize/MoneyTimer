@@ -11,7 +11,7 @@ export class AppComponent {
   private newGoalObject: any = undefined;
   private editExistingGoalObject: any = undefined;
   private showAllGoals = false;
-
+  private updateProgressBar_counter : number = 0;
 /* ========================= When hourlySalary is updated ========================= */
   onSalaryUpdated(newHourlySalary : number) {
   	this.newHourlySalary = newHourlySalary;
@@ -35,6 +35,12 @@ export class AppComponent {
 
   onUpdateTimeWorkedOutToday_event(timeWorkedOutTodayEventObject : any) {
     this.timeWorkedOutToday_milliseconds = timeWorkedOutTodayEventObject;
+    console.log("update");
+  }
+
+  onUpdateProgressBars_event(progressBarEventObject : any) {
+     console.log("onUpdateProgressBars_event($event)");
+     this.updateProgressBar_counter++;
   }
 
   getLeftColumnCSSClass() {
