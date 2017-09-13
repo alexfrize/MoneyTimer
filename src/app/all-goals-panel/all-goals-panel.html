@@ -1,7 +1,11 @@
 <!--- =================================== All goals Panel =================================== -->
 <div id="allGoalsPanel">
-	<h4>Current goals (using {{usageOfIncomeInPercents()}}% of income)</h4>
-	<div [dragula]='"goalsList"' [dragulaModel]="goals">
+	<div class="allGoalsPanel_topMenu">
+		<span [class]="getCSSOf__allGoalsPanel_topMenu_item('current')" (click)="setCSSOf__allGoalsPanel_topMenu_item('current')">Current goals</span>
+		<span [class]="getCSSOf__allGoalsPanel_topMenu_item('finished')" (click)="setCSSOf__allGoalsPanel_topMenu_item('finished')">Finished goals</span>
+	</div>
+	<h4 *ngIf="showCurrentOrFinished==='current'">Current goals (using {{usageOfIncomeInPercents()}}% of income)</h4>
+	<div *ngIf="showCurrentOrFinished==='current'" [dragula]='"goalsList"' [dragulaModel]="goals">
 		<div class="col-md-12" *ngFor="let goal of goals; let i = index" >
 		<div *ngIf="showAllGoals || i<3" class="allGoalsPanel__goalElement col-md-12">
 				<p (click)="editExistingGoal(goals[i])" class="allGoalsPanel__goalElement__edit-button"><span class="glyphicon glyphicon-pencil"></span></p>
@@ -30,7 +34,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12 allGoalsPanel__button-container">
+	<div *ngIf="showCurrentOrFinished==='current'" class="col-md-12 allGoalsPanel__button-container">
 		<form class="text-right">
 			<button md-raised-button (click)="showAllGoals_onclick()" color="primary">{{getButtonMoreLessGoalsText()}}</button>
 		</form>

@@ -3,6 +3,37 @@
 #allGoalsPanel {
 	padding-top: 30px;
 }
+
+.allGoalsPanel_topMenu {
+	font-size: 14px;
+	background: #f3eff9;
+	padding: 10px;
+}
+
+.allGoalsPanel_topMenu_item {
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
+	transition: 0.5s;
+}
+
+.allGoalsPanel_topMenu_item_active {
+	color: #673ab7;
+}
+
+.allGoalsPanel_topMenu_item_not-active {
+	color: #d1c4e9;
+}
+
+.allGoalsPanel_topMenu_item+.allGoalsPanel_topMenu_item {
+	margin-left: 30px;
+}
+
+.allGoalsPanel_topMenu_item:hover {
+	cursor: pointer;
+	color: #673ab7;
+}
+
 .allGoalsPanel__goalElement {
 	background: white;
 	margin-top: 10px;

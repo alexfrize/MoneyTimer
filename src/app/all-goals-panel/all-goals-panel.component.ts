@@ -24,7 +24,9 @@ export class AllGoalsPanelComponent {
 	private updateProgressBar_counter_prev : number;
 	private timeWorkedOutToday_milliseconds_lastSave : number = null;
 	private goals = [];
+	private finishedGoals = [];
 	private showAllGoals = false;
+	private showCurrentOrFinished : string = 'current';
 
 	constructor (public dialog: MdDialog, private dragulaService : DragulaService, private goalsService : GoalsService) {
 		dragulaService.drop.subscribe((value) => {
@@ -33,6 +35,16 @@ export class AllGoalsPanelComponent {
       		this.updateProgress();
 		});
 		console.log("from AllGoalsPanelComponent constructor | this.goalObject == ", this.goalObject);
+	}
+
+	getCSSOf__allGoalsPanel_topMenu_item(mode : string) {
+		return (mode === this.showCurrentOrFinished) ?
+						"allGoalsPanel_topMenu_item allGoalsPanel_topMenu_item_active" :
+						"allGoalsPanel_topMenu_item allGoalsPanel_topMenu_item_not-active";
+	}
+
+	setCSSOf__allGoalsPanel_topMenu_item (mode : string) {
+		this.showCurrentOrFinished = mode;
 	}
 
 	/* ================  Updates progress bars when element in goals array moves ================ */
@@ -50,18 +62,28 @@ export class AllGoalsPanelComponent {
 
 		}
 			
-		for (let goal of this.goals) {
-			let t = goal.goalPrice/this.hourlySalary;
-			//goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
-			
-			let salary_ms = this.hourlySalary/(3600*1000); // dollars per 1 ms
-			let dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds; // * KOEFF (don't forget to multiple  to % of_income_koeff)
-			goal.percentComplete = Math.round(dollarsComplete * 100/goal.goalPrice);
-			console.log("===================");
-			console.log("dollarsComplete==",dollarsComplete);
-			console.log(`t== ${t} goal.goalPrice == ${goal.goalPrice}`);
-			console.log("goal.percentToSave", goal.percentToSave);
-			console.log("goal.percentComplete", goal.percentComplete);
+		for (let i=0; i<this.goals.length; i++) {
+			if (this.isActive(i)) {
+				let t = this.goals[i].goalPrice/this.hourlySalary;
+				//goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
+				
+				let salary_ms = this.hourlySalary/(3600*1000); // dollars per 1 ms
+				let dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds*this.goals[i].percentToSave/100; // * KOEFF (don't forget to multiple  to % of_income_koeff)
+				if (dollarsComplete >= this.goals[i].goalPrice) {
+					this.finishedGoals.push(this.goals[i]);
+					this.goals.splice(i,1);
+					this.updateIndexes();
+				}
+				/*
+				let dollarsComplete = sdollarsComplete_lastSave + salary_ms*(this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave)*goal.percentToSave/100;
+				*/
+				this.goals[i].percentComplete = Math.round(dollarsComplete * 100/this.goals[i].goalPrice);
+				console.log("===================");
+				console.log("dollarsComplete==",dollarsComplete);
+				console.log(`t== ${t} goal.goalPrice == ${this.goals[i].goalPrice}`);
+				console.log("goal.percentToSave", this.goals[i].percentToSave);
+				console.log("goal.percentComplete", this.goals[i].percentComplete);
+			}
 		}
 		
 	}
