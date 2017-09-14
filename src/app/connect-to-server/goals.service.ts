@@ -66,6 +66,18 @@ export class GoalsService {
        
   }
 
+
+  deleteGoalFromDB(goalObject : IGoal) : Observable<Response> {
+        var _url = "/api/deletegoal" + "?id=" + goalObject._id;
+
+        // var headers = new Headers({
+        //   'Content-Type': 'application/json'
+        // });
+        console.warn("DELETE: goalObject._id ===", goalObject._id);
+
+        return this._http.delete(_url)
+        .catch(this.handleError);
+  }
   /* ========================================================================================================== */
   handleError(error : Response) : any {
     console.error("ERROR: ", error);

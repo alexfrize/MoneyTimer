@@ -91,12 +91,24 @@
 	transition: 0.5s;
 	position: absolute;
 	top: 16px;
-	right: 16px;
+	right: 32px;
 	font-size: 14px;
 	color: #673ab7;
 }
 
-.allGoalsPanel__goalElement__edit-button:hover {
+.allGoalsPanel__goalElement__delete-button {
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
+	transition: 0.5s;
+	position: absolute;
+	top: 16px;
+	right: 12px;
+	font-size: 14px;
+	color: #673ab7;
+}
+
+.allGoalsPanel__goalElement__edit-button:hover, .allGoalsPanel__goalElement__delete-button:hover {
 	cursor: pointer;
 	color: #d1c4e9;
 }

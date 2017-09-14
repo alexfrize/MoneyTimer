@@ -9,6 +9,7 @@
 		<div class="col-md-12" *ngFor="let goal of goals; let i = index" >
 		<div *ngIf="showAllGoals || i<3" class="allGoalsPanel__goalElement col-md-12">
 				<p (click)="editExistingGoal(goals[i])" class="allGoalsPanel__goalElement__edit-button"><span class="glyphicon glyphicon-pencil"></span></p>
+				<p (click)="deleteExistingGoal(i)" class="allGoalsPanel__goalElement__delete-button"><span class="glyphicon glyphicon-remove"></span></p>
 				<div class="row">
 					<div class="col-md-4">
 						<img class="center-block img-responsive allGoalsPanel__goalElement_img" [src]="getGoalImage(goal)">

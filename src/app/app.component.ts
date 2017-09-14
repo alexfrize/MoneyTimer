@@ -35,11 +35,11 @@ export class AppComponent {
 
   onUpdateTimeWorkedOutToday_event(timeWorkedOutTodayEventObject : any) {
     this.timeWorkedOutToday_milliseconds = timeWorkedOutTodayEventObject;
-    console.log("update");
+    
   }
 
   onUpdateProgressBars_event(progressBarEventObject : any) {
-     console.log("onUpdateProgressBars_event($event)");
+     //console.log("onUpdateProgressBars_event($event)");
      this.updateProgressBar_counter++;
   }
 

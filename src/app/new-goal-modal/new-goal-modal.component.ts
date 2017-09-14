@@ -13,7 +13,8 @@ export class NewGoalModalComponent {
   private newGoalObject : any;
   private goalObject_id : string;
   private goalImageFile : File = undefined;
-  private goalObject_priority : Number;
+  private goalObject_priority : number;
+  private goalObject_dollarsComplete : number;
   private fileToLoad : File = undefined;
   private modalTitle : string = 'Add new goal';
   private newGoalForm = new FormGroup({
@@ -47,6 +48,11 @@ export class NewGoalModalComponent {
     this.newGoalObject = Object.assign({}, this.newGoalForm.value);
     this.newGoalObject.goalImageFile = this.goalImageFile;
 
+
+    if (!this.newGoalObject.dollarsComplete) {
+      this.newGoalObject.dollarsComplete = 0;
+    }
+
     if (!this.newGoalObject.percentToSave) {
     	this.newGoalObject.percentToSave = "100";
     }
@@ -77,6 +83,7 @@ export class NewGoalModalComponent {
     this.goalImageFile = goalObject.goalImageFile;
     this.goalObject_id = goalObject._id;
     this.goalObject_priority = goalObject.priority;
+    this.goalObject_dollarsComplete = goalObject.dollarsComplete;
     console.log("_id == ", this.goalObject_id);
 
   }

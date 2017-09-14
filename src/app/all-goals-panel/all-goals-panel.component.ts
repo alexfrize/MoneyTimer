@@ -50,8 +50,8 @@ export class AllGoalsPanelComponent {
 	/* ================  Updates progress bars when element in goals array moves ================ */
 
 	updateProgress() {
-		console.log("updateProgress()");
-		console.log("ALLGOALS::timeWorkedOutToday_milliseconds ===", this.timeWorkedOutToday_milliseconds);
+		// console.log("updateProgress()");
+		// console.log("ALLGOALS::timeWorkedOutToday_milliseconds ===", this.timeWorkedOutToday_milliseconds);
 		let delta;
 		if (this.timeWorkedOutToday_milliseconds_lastSave !== this.timeWorkedOutToday_milliseconds) {
 			delta = this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave;
@@ -78,11 +78,13 @@ export class AllGoalsPanelComponent {
 				let dollarsComplete = sdollarsComplete_lastSave + salary_ms*(this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave)*goal.percentToSave/100;
 				*/
 				this.goals[i].percentComplete = Math.round(dollarsComplete * 100/this.goals[i].goalPrice);
+				/*
 				console.log("===================");
 				console.log("dollarsComplete==",dollarsComplete);
 				console.log(`t== ${t} goal.goalPrice == ${this.goals[i].goalPrice}`);
 				console.log("goal.percentToSave", this.goals[i].percentToSave);
 				console.log("goal.percentComplete", this.goals[i].percentComplete);
+				*/
 			}
 		}
 		
@@ -143,7 +145,7 @@ export class AllGoalsPanelComponent {
 		this.goalsService.saveGoalToDB(goalObjectToSaveToDB)
 			.subscribe(
 				result => {
-					let _id = result.json();
+					let _id = result;
 					var goalObjectToSaveToArray = Object.assign({ _id } , goalObjectToSaveToDB)
 					console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
 
@@ -167,7 +169,7 @@ export class AllGoalsPanelComponent {
 	}
 
 	ngOnChanges() {
-		console.log("from AllGoalsPanelComponent  ngOnChanges | this.goalObject == ", this.goalObject);		
+		//console.log("from AllGoalsPanelComponent  ngOnChanges | this.goalObject == ", this.goalObject);		
 		if (this.goalObject) {
 			
 			var goalObjectToSaveToDB = Object.assign({
@@ -243,5 +245,31 @@ export class AllGoalsPanelComponent {
 	      console.log('========= res:', result);
 	      if (result) this.saveChanges(result);
 	    });		
+	}
+
+
+/* ========================= Deletes goal ========================= */
+	deleteExistingGoal(goalNum : number) {
+		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
+		console.log("=====DELETE====================");
+		console.log(this.goals[goalNum]);
+		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
+		console.log("=========================");
+		let objectToDelete = this.goals[goalNum];
+		this.goals.splice(goalNum,1);
+		this.deleteGoalFromDB(objectToDelete);
+	}
+
+	deleteGoalFromDB(goalObjectToDeleteFromDB : IGoal) {
+
+		this.goalsService.deleteGoalFromDB(goalObjectToDeleteFromDB)
+			.subscribe(
+				result => {
+					console.log("RESULT OF DELETE: ", result);
+					console.warn("goalObjectToSaveToDB",goalObjectToDeleteFromDB);
+				},
+				error => console.warn(error)
+			);
+
 	}
 }

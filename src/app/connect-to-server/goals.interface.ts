@@ -1,10 +1,11 @@
 export interface IGoal { 
-  _id : String,
-  goalTitle : String,
-  goalDescription : String,
+  _id : string,
+  goalTitle : string,
+  goalDescription : string,
   goalImageFile : any,
-  goalPrice: Number,
-  percentToSave : Number,
-  percentComplete : Number,
-  priority: Number
+  goalPrice: number,
+  percentToSave : number,
+  dollarsComplete : number,
+  percentComplete : number,
+  priority: number
 }
