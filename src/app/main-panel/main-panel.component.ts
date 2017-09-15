@@ -21,7 +21,8 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private TMP = 30; //30$ в час - удалить и импортировать из другого класса
   private workedOutToday_buttonTitle : string = 'Start';
   private workedOutToday_buttonColor : string  = 'warn';
-  
+  private ifTimerIsWorking_counter : number = 0;
+
   @Input() hourlySalary : number;
   @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
   @Output() updateProgressBars_event : EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -37,6 +38,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
     	this.updateMoneyTimer();
       this.updateTimeWorkedOutToday_event.emit(this.timeWorkedOutToday_milliseconds);
       this.updateProgressBars_event.emit(true);
+      this.checkIfTimerIsWorking();
     	this.ticks = t});
     // saves current state every 1 minute (60000 ms)
     let saveState_timer = Observable.interval(60000);
@@ -46,6 +48,34 @@ export class MainPanelComponent implements OnInit, OnChanges {
   ngOnChanges() {
   	this.TMP = this.hourlySalary;
     console.log("ngOnChanges(): this.hourlySalary==", this.hourlySalary);
+  }
+
+/* Checkes, if Money timer is working or not. Shows modal if not */
+  checkIfTimerIsWorking() {
+    
+    let SHOW_MODAL_AFTER_N_SECONDS = 10;
+
+    switch (this.workedOutToday_buttonTitle) {
+      case "Start":
+        this.ifTimerIsWorking_counter++;
+        if (this.ifTimerIsWorking_counter > SHOW_MODAL_AFTER_N_SECONDS) {
+          alert("You didn't start the timer! Please don't forget to start it")
+          this.ifTimerIsWorking_counter = 0;
+        }
+        break;
+
+      case "Continue":
+        this.ifTimerIsWorking_counter++;
+        if (this.ifTimerIsWorking_counter > SHOW_MODAL_AFTER_N_SECONDS) {
+          alert("Please don't forget to press 'Continue' button to start timer again")
+          this.ifTimerIsWorking_counter = 0;
+        }
+        break;        
+      
+      default:
+        this.ifTimerIsWorking_counter = 0;
+        break;
+    }
   }
 
 /* ========================= Starts timer of working hours ========================= */

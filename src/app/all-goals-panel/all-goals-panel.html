@@ -1,8 +1,8 @@
 <!--- =================================== All goals Panel =================================== -->
 <div id="allGoalsPanel">
 	<div class="allGoalsPanel_topMenu">
-		<span [class]="getCSSOf__allGoalsPanel_topMenu_item('current')" (click)="setCSSOf__allGoalsPanel_topMenu_item('current')">Current goals</span>
-		<span [class]="getCSSOf__allGoalsPanel_topMenu_item('finished')" (click)="setCSSOf__allGoalsPanel_topMenu_item('finished')">Finished goals</span>
+		<span [class]="getCSSOf__allGoalsPanel_topMenu_item('current')" (click)="setCSSOf__allGoalsPanel_topMenu_item('current')">Current goals ({{goals.length}})</span>
+		<span [class]="getCSSOf__allGoalsPanel_topMenu_item('finished')" (click)="setCSSOf__allGoalsPanel_topMenu_item('finished')">Finished goals ({{finishedGoals.length}})</span>
 	</div>
 	<h4 *ngIf="showCurrentOrFinished==='current'">Current goals (using {{usageOfIncomeInPercents()}}% of income)</h4>
 	<div *ngIf="showCurrentOrFinished==='current'" [dragula]='"goalsList"' [dragulaModel]="goals">

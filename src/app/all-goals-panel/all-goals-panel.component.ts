@@ -64,12 +64,21 @@ export class AllGoalsPanelComponent {
 			
 		for (let i=0; i<this.goals.length; i++) {
 			if (this.isActive(i)) {
-				let t = this.goals[i].goalPrice/this.hourlySalary;
+				//let t = this.goals[i].goalPrice/this.hourlySalary;
 				//goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
 				
 				let salary_ms = this.hourlySalary/(3600*1000); // dollars per 1 ms
-				let dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds*this.goals[i].percentToSave/100; // * KOEFF (don't forget to multiple  to % of_income_koeff)
-				if (dollarsComplete >= this.goals[i].goalPrice) {
+
+				let dollarsComplete_lastSave = this.goals[i].dollarsComplete;
+				let timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
+				let timeWorkedOutToday_milliseconds_delta = this.timeWorkedOutToday_milliseconds - timeWorkedOutToday_milliseconds_lastSave;
+
+				this.goals[i].dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds*this.goals[i].percentToSave/100; // * KOEFF == this.goals[i].percentToSave
+				/*
+				this.goals[i].dollarsComplete = salary_ms*(this.timeWorkedOutToday_milliseconds-timeWorkedOutToday_milliseconds_lastSave) * this.goals[i].percentToSave/100 + this.goals[i].dollarsComplete_lastSave;  // * KOEFF == this.goals[i].percentToSave
+				*/
+				this.goals[i].percentComplete = Math.round(this.goals[i].dollarsComplete * 100/this.goals[i].goalPrice);
+				if (this.goals[i].dollarsComplete >= this.goals[i].goalPrice) {
 					this.finishedGoals.push(this.goals[i]);
 					this.goals.splice(i,1);
 					this.updateIndexes();
@@ -77,7 +86,8 @@ export class AllGoalsPanelComponent {
 				/*
 				let dollarsComplete = sdollarsComplete_lastSave + salary_ms*(this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave)*goal.percentToSave/100;
 				*/
-				this.goals[i].percentComplete = Math.round(dollarsComplete * 100/this.goals[i].goalPrice);
+
+				
 				/*
 				console.log("===================");
 				console.log("dollarsComplete==",dollarsComplete);

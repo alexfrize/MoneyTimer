@@ -40,6 +40,7 @@ router.put("/api/savegoalchanges", function(req, res) {
         goalPrice: req.body.goalPrice,
         goalImageFile : req.body.goalImageFile,
         percentToSave : req.body.percentToSave,
+        dollarsComplete : req.body.dollarsComplete,
         percentComplete : req.body.percentComplete,
         priority : req.body.priority
       }
@@ -63,6 +64,17 @@ router.put("/api/updateallgoalsindexes", function(req, res) {
 
   res.send("OK!");
 });
+
+router.delete("/api/deletegoal", function(req, res) {
+  console.log("DELETE:");
+  var _id = req.query.id;
+  console.log(_id);
+ 
+  db.goals.remove({ _id :  ObjectId(_id) }, true );
+ 
+  res.send("deleted");
+});
+
 
 router.get("/", function(req, res) {
     res.send("Server status is: OK");
