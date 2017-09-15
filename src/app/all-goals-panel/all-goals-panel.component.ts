@@ -75,7 +75,7 @@ export class AllGoalsPanelComponent {
 
 				this.goals[i].dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds*this.goals[i].percentToSave/100; // * KOEFF == this.goals[i].percentToSave
 				/*
-				this.goals[i].dollarsComplete = salary_ms*(this.timeWorkedOutToday_milliseconds-timeWorkedOutToday_milliseconds_lastSave) * this.goals[i].percentToSave/100 + this.goals[i].dollarsComplete_lastSave;  // * KOEFF == this.goals[i].percentToSave
+ 					this.goals[i].dollarsComplete = salary_ms*(this.timeWorkedOutToday_milliseconds-timeWorkedOutToday_milliseconds_lastSave) * this.goals[i].percentToSave/100 + this.goals[i].dollarsComplete_lastSave;  // * KOEFF == this.goals[i].percentToSave
 				*/
 				this.goals[i].percentComplete = Math.round(this.goals[i].dollarsComplete * 100/this.goals[i].goalPrice);
 				if (this.goals[i].dollarsComplete >= this.goals[i].goalPrice) {
