@@ -57,7 +57,8 @@ router.put("/api/updateallgoalsindexes", function(req, res) {
     db.goals.update({_id : ObjectId(updateObj._id) },
       { 
         $set : { 
-          priority : updateObj.priority
+          priority : updateObj.priority,
+          dollarsComplete : updateObj.dollarsComplete
         }
       });
   }

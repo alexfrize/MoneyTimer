@@ -19,10 +19,11 @@ export class AllGoalsPanelComponent {
 	@Input() goalObject : any;
 	@Input() timeWorkedOutToday_milliseconds : number;
 	@Input() hourlySalary : number;
+	private hourlySalary_lastSave : number;
 	@Input() updateProgressBar_counter : number;
 	@Output() showAllGoals_event : EventEmitter<boolean> = new EventEmitter<boolean>();
 	private updateProgressBar_counter_prev : number;
-	private timeWorkedOutToday_milliseconds_lastSave : number = null;
+	private timeWorkedOutToday_milliseconds_lastSave : number = 0;
 	private goals = [];
 	private finishedGoals = [];
 	private showAllGoals = false;
@@ -47,54 +48,38 @@ export class AllGoalsPanelComponent {
 		this.showCurrentOrFinished = mode;
 	}
 
-	/* ================  Updates progress bars when element in goals array moves ================ */
+	/* ================  Check if hourly salsry has changed. If so, saves current state to DB ================ */
+	checkIfhourlySalaryChanged() {
+		if (this.hourlySalary !== this.hourlySalary_lastSave) {
+			this.hourlySalary_lastSave = this.hourlySalary;
+			this.updateIndexes();
+		}
+	}
 
+	/* ================  Updates progress bars when element in goals array moves ================ */
 	updateProgress() {
 		// console.log("updateProgress()");
 		// console.log("ALLGOALS::timeWorkedOutToday_milliseconds ===", this.timeWorkedOutToday_milliseconds);
-		let delta;
-		if (this.timeWorkedOutToday_milliseconds_lastSave !== this.timeWorkedOutToday_milliseconds) {
-			delta = this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave;
-			console.log("delta==", delta);
-			console.log("this.timeWorkedOutToday_milliseconds_lastSave", this.timeWorkedOutToday_milliseconds_lastSave);
-			console.log("this.timeWorkedOutToday_milliseconds", this.timeWorkedOutToday_milliseconds);
-			this.timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
 
-		}
-			
 		for (let i=0; i<this.goals.length; i++) {
-			if (this.isActive(i)) {
-				//let t = this.goals[i].goalPrice/this.hourlySalary;
-				//goal.percentComplete += delta*(+goal.percentToSave)*6000/(1000*3600);
-				
+			if (!this.goals[i].dollarsComplete_lastSave) {
+				this.goals[i].dollarsComplete_lastSave = this.goals[i].dollarsComplete;
+			}
+
+			this.checkIfhourlySalaryChanged();
+			if (this.isActive(i) === "Active") {
 				let salary_ms = this.hourlySalary/(3600*1000); // dollars per 1 ms
-
-				let dollarsComplete_lastSave = this.goals[i].dollarsComplete;
-				let timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
-				let timeWorkedOutToday_milliseconds_delta = this.timeWorkedOutToday_milliseconds - timeWorkedOutToday_milliseconds_lastSave;
-
-				this.goals[i].dollarsComplete = salary_ms*this.timeWorkedOutToday_milliseconds*this.goals[i].percentToSave/100; // * KOEFF == this.goals[i].percentToSave
-				/*
- 					this.goals[i].dollarsComplete = salary_ms*(this.timeWorkedOutToday_milliseconds-timeWorkedOutToday_milliseconds_lastSave) * this.goals[i].percentToSave/100 + this.goals[i].dollarsComplete_lastSave;  // * KOEFF == this.goals[i].percentToSave
-				*/
+				if (this.goals[i].dollarsComplete_lastSave == undefined) this.goals[i].dollarsComplete_lastSave = 0;
+ 				this.goals[i].dollarsComplete = salary_ms*(this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave) * this.goals[i].percentToSave/100 + this.goals[i].dollarsComplete_lastSave;  // * KOEFF == this.goals[i].percentToSave
 				this.goals[i].percentComplete = Math.round(this.goals[i].dollarsComplete * 100/this.goals[i].goalPrice);
 				if (this.goals[i].dollarsComplete >= this.goals[i].goalPrice) {
 					this.finishedGoals.push(this.goals[i]);
 					this.goals.splice(i,1);
 					this.updateIndexes();
 				}
-				/*
-				let dollarsComplete = sdollarsComplete_lastSave + salary_ms*(this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave)*goal.percentToSave/100;
-				*/
-
-				
-				/*
-				console.log("===================");
-				console.log("dollarsComplete==",dollarsComplete);
-				console.log(`t== ${t} goal.goalPrice == ${this.goals[i].goalPrice}`);
-				console.log("goal.percentToSave", this.goals[i].percentToSave);
-				console.log("goal.percentComplete", this.goals[i].percentComplete);
-				*/
+			}
+			else { // update persantage for non-active items
+				this.goals[i].percentComplete = Math.round(this.goals[i].dollarsComplete * 100/this.goals[i].goalPrice);
 			}
 		}
 		
@@ -102,25 +87,35 @@ export class AllGoalsPanelComponent {
 
 	/* ================  Updates indexes (priorities) in DB when element in goals array moves ================ */
 	updateIndexes() {
+
+		console.log("updateIndexes()");
+		this.timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
+		console.log("this.timeWorkedOutToday_milliseconds_lastSave",this.timeWorkedOutToday_milliseconds_lastSave);
 		for (let i=0; i < this.goals.length; i++) {
-			console.log("this.goals[i].priority", this.goals[i].priority);
+			// console.log("this.goals[i].priority", this.goals[i].priority);
 			this.goals[i].priority = i;
-			console.log("this.goals[i].priority::up", this.goals[i].priority);
+			this.goals[i].dollarsComplete_lastSave = this.goals[i].dollarsComplete;
+			console.log("this.goals[i].dollarsComplete_lastSave == ", this.goals[i].dollarsComplete_lastSave);
+			// console.log("this.goals[i].dollarsComplete==",this.goals[i].dollarsComplete);
+			// console.log("this.goals[i].priority::up", this.goals[i].priority);
 		}
-		this.updateAllGoalsIndexesInDB();
+		this.updateAllGoalsIndexesAndDollarsCompleteInDB();
 	}
 
 	/* ================  Saves all goals to database ================ */
-	updateAllGoalsIndexesInDB() {
-		let goalsIndexes = [];
+	updateAllGoalsIndexesAndDollarsCompleteInDB() {
+		let goalsIndexesAndDollarsComplete = [];
+
+
 		for (let goal of this.goals) {
-			goalsIndexes.push({
+			goalsIndexesAndDollarsComplete.push({
 				_id : goal._id,
-				priority : goal.priority
+				priority : goal.priority,
+				dollarsComplete : goal.dollarsComplete
 			});
 		}
-		console.log("priorities goalsIndexes[] ==" , goalsIndexes);
-		this.goalsService.updateAllGoalsIndexesInDB(goalsIndexes)
+		console.log("priorities goalsIndexesAndDollarsComplete[] ==" , goalsIndexesAndDollarsComplete);
+		this.goalsService.updateAllGoalsIndexesAndDollarsCompleteInDB(goalsIndexesAndDollarsComplete)
 			.subscribe(
 				result => {
 					console.log("updateAllGoalsIndexesInDB::result == ", result);
@@ -128,6 +123,7 @@ export class AllGoalsPanelComponent {
 				error => console.error(error)
 			);		
 	}
+
 
 	ngOnInit() {
 		this.goalsService.loadAllGoals()
@@ -207,12 +203,15 @@ export class AllGoalsPanelComponent {
  		for (let i = 0; i < this.goals.length; i++) {
  			if (this.goals[i]._id == goalObj._id) foundAtIndex = i;
  		}
- 		// We don't edit percentComplete property and don't store it in goalObj, so we just save it and restore
- 		let tmp_percentComplete = this.goals[foundAtIndex].percentComplete;
+ 		// We don't edit dollarsComplete property and don't store it in goalObj, so we just save it and restore
+
+ 		let tmp_dollarsComplete = this.goals[foundAtIndex].dollarsComplete;
+ 		this.goals[foundAtIndex].dollarsComplete_lastSave = this.goals[foundAtIndex].dollarsComplete;
  		this.goals[foundAtIndex] = goalObj; 
  		console.warn("goalObj===",goalObj);
  		this.saveGoalChangesToDB(goalObj);
- 		this.goals[foundAtIndex].percentComplete = tmp_percentComplete;
+ 		// this.goals[foundAtIndex].percentComplete = tmp_percentComplete;
+ 		this.goals[foundAtIndex].dollarsComplete = tmp_dollarsComplete;
  		console.log("found at ", foundAtIndex);
 		this.goalObject = undefined; 		
 	}
@@ -249,6 +248,9 @@ export class AllGoalsPanelComponent {
 		console.log(goalObject);
 		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
 		console.log("=========================");
+		
+		this.updateIndexes(); // Saves current state to DB
+
 		let dialogRef = this.dialog.open(NewGoalModalComponent);
 		dialogRef.componentInstance.loadGoalObject(goalObject);
 	    dialogRef.afterClosed().subscribe(result => {

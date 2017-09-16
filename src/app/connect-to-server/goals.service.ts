@@ -51,16 +51,16 @@ export class GoalsService {
   }
 
   /* ========================================================================================================== */
-  updateAllGoalsIndexesInDB(goalsIndexesArray : IGoal[]) : Observable<Response> {
+  updateAllGoalsIndexesAndDollarsCompleteInDB(goalsIndexesAndDollarsCompleteArray : IGoal[]) : Observable<Response> {
         var _url = "/api/updateallgoalsindexes";
         var headers = new Headers({
           'Content-Type': 'application/json'
         });
-        console.warn("JSON.stringify(goalsIndexesArray) ===", JSON.stringify(goalsIndexesArray));
+        console.warn("JSON.stringify(goalsIndexesArray) ===", JSON.stringify(goalsIndexesAndDollarsCompleteArray));
         
         return this._http.put(
           _url,
-          JSON.stringify(goalsIndexesArray),
+          JSON.stringify(goalsIndexesAndDollarsCompleteArray),
           { headers }
         ).catch(this.handleError);
        
