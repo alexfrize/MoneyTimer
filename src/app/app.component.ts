@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  private newHourlySalary : number;
+  private newHourlySalary : number = 40; // to avoid a zone error
   private timeWorkedOutToday_milliseconds : number;
   private newGoalObject: any = undefined;
   private editExistingGoalObject: any = undefined;

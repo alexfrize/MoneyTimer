@@ -44,10 +44,9 @@ export class NewGoalModalComponent {
 
 /* ========================= Event handler on form submit ========================= */    
   onSubmitGoalForm() {
-    console.log(this.newGoalForm.value);
+
     this.newGoalObject = Object.assign({}, this.newGoalForm.value);
     this.newGoalObject.goalImageFile = this.goalImageFile;
-
 
     if (!this.newGoalObject.dollarsComplete) {
       this.newGoalObject.dollarsComplete = 0;
@@ -83,7 +82,9 @@ export class NewGoalModalComponent {
     this.goalImageFile = goalObject.goalImageFile;
     this.goalObject_id = goalObject._id;
     this.goalObject_priority = goalObject.priority;
+    console.warn("\r\n\r\n\r\n\r\n\r\nloadGoalObject()::BEFORE => this.goalObject_dollarsComplete", this.goalObject_dollarsComplete);
     this.goalObject_dollarsComplete = goalObject.dollarsComplete;
+    console.warn("\r\n\r\n\r\n\r\n\r\nloadGoalObject() => this.goalObject_dollarsComplete", this.goalObject_dollarsComplete);
     console.log("_id == ", this.goalObject_id);
 
   }

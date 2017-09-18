@@ -42,7 +42,7 @@ export class GoalsService {
         var headers = new Headers({
           'Content-Type': 'application/json'
         });
-        console.warn("JSON.stringify(goalObject) ===", JSON.stringify(goalObject));
+        //console.warn("JSON.stringify(goalObject) ===", JSON.stringify(goalObject));
         return this._http.put(
           _url,
           JSON.stringify(goalObject),
@@ -56,7 +56,7 @@ export class GoalsService {
         var headers = new Headers({
           'Content-Type': 'application/json'
         });
-        console.warn("JSON.stringify(goalsIndexesArray) ===", JSON.stringify(goalsIndexesAndDollarsCompleteArray));
+        // console.warn("JSON.stringify(goalsIndexesArray) ===", JSON.stringify(goalsIndexesAndDollarsCompleteArray));
         
         return this._http.put(
           _url,

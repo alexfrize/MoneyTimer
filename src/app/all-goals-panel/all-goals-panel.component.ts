@@ -90,12 +90,12 @@ export class AllGoalsPanelComponent {
 
 		console.log("updateIndexes()");
 		this.timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
-		console.log("this.timeWorkedOutToday_milliseconds_lastSave",this.timeWorkedOutToday_milliseconds_lastSave);
+		//console.log("this.timeWorkedOutToday_milliseconds_lastSave",this.timeWorkedOutToday_milliseconds_lastSave);
 		for (let i=0; i < this.goals.length; i++) {
 			// console.log("this.goals[i].priority", this.goals[i].priority);
 			this.goals[i].priority = i;
 			this.goals[i].dollarsComplete_lastSave = this.goals[i].dollarsComplete;
-			console.log("this.goals[i].dollarsComplete_lastSave == ", this.goals[i].dollarsComplete_lastSave);
+			//console.log("this.goals[i].dollarsComplete_lastSave == ", this.goals[i].dollarsComplete_lastSave);
 			// console.log("this.goals[i].dollarsComplete==",this.goals[i].dollarsComplete);
 			// console.log("this.goals[i].priority::up", this.goals[i].priority);
 		}
@@ -163,7 +163,8 @@ export class AllGoalsPanelComponent {
 
 	/* ========================= Saves changes to existing object in DB ========================= */
 	saveGoalChangesToDB(goalObjectToSaveToDB : IGoal) {
-			console.warn("--\r\n\r\n\r\ngoalObjectToSaveToDB",goalObjectToSaveToDB);
+		console.log("saveGoalChangesToDB() : 166");
+		console.warn("--\r\n\r\n\r\ngoalObjectToSaveToDB---BEFORE",goalObjectToSaveToDB);
 		this.goalsService.saveGoalChangesToDB(goalObjectToSaveToDB)
 			.subscribe(
 				result => {
@@ -197,24 +198,31 @@ export class AllGoalsPanelComponent {
 
 /* ========================= Saves changes to existing object ========================= */
 	saveChanges(goalObj : any) {
+		console.log("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n =========================SaveCahnges() : 201");
 		console.log("Saving existing object!", goalObj);
+
 		console.log('ID!!!', goalObj._id);
 		let foundAtIndex : number;
  		for (let i = 0; i < this.goals.length; i++) {
  			if (this.goals[i]._id == goalObj._id) foundAtIndex = i;
  		}
  		// We don't edit dollarsComplete property and don't store it in goalObj, so we just save it and restore
-
- 		let tmp_dollarsComplete = this.goals[foundAtIndex].dollarsComplete;
+ 		/*
+ 		//let tmp_dollarsComplete = this.goals[foundAtIndex].dollarsComplete;
+ 		*/
  		this.goals[foundAtIndex].dollarsComplete_lastSave = this.goals[foundAtIndex].dollarsComplete;
  		this.goals[foundAtIndex] = goalObj; 
  		console.warn("goalObj===",goalObj);
+ 		console.log("=================== SaveCahnges() : 215");
  		this.saveGoalChangesToDB(goalObj);
  		// this.goals[foundAtIndex].percentComplete = tmp_percentComplete;
- 		this.goals[foundAtIndex].dollarsComplete = tmp_dollarsComplete;
+ 		/*
+ 		//this.goals[foundAtIndex].dollarsComplete = tmp_dollarsComplete;
+ 		*/
  		console.log("found at ", foundAtIndex);
 		this.goalObject = undefined; 		
 	}
+
 /* ========================= Returns image of goal or template image (is there is no specific image for goal) ========================= */
 	getGoalImage(goalObj : any) {
 		return (goalObj.goalImageFile) ? goalObj.goalImageFile : 'assets/img/goal_template_image.png';
@@ -241,22 +249,35 @@ export class AllGoalsPanelComponent {
 		return sum;
 	}
 
+	getGoalItemById(requested_id : string) {
+		for (let goal of this.goals) {
+			if (goal._id === requested_id) return goal;
+		}
+	}
+
+
 /* ========================= Returns percents of active using income ========================= */
 	editExistingGoal(goalObject : any) {
-		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
-		console.log("=========================");
-		console.log(goalObject);
-		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
-		console.log("=========================");
+		// console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
+		// console.log("=========================");
+		// console.log(goalObject);
+		// console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
+		// console.log("=========================");
 		
 		this.updateIndexes(); // Saves current state to DB
 
 		let dialogRef = this.dialog.open(NewGoalModalComponent);
 		dialogRef.componentInstance.loadGoalObject(goalObject);
 	    dialogRef.afterClosed().subscribe(result => {
-	      console.log('========= res:', result);
-	      if (result) this.saveChanges(result);
-	    });		
+				console.log('\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n ----- after_dialog => result');
+	      /* Generating completely new object */
+	      let goalObjectToEdit = JSON.parse(JSON.stringify(result)); // COMPLETELY NEW OBJECT
+	     	goalObjectToEdit.dollarsComplete = this.getGoalItemById(goalObjectToEdit._id).dollarsComplete;; // !important
+	      console.warn('========= goalObjectToEdit:', goalObjectToEdit);
+	      console.warn('========= goalObjectToEdit:2', goalObjectToEdit);
+	      console.warn('========= goalObjectToEdit:3', goalObjectToEdit);
+	      if (result) this.saveChanges(goalObjectToEdit);
+	    });
 	}
 
 
@@ -278,7 +299,7 @@ export class AllGoalsPanelComponent {
 			.subscribe(
 				result => {
 					console.log("RESULT OF DELETE: ", result);
-					console.warn("goalObjectToSaveToDB",goalObjectToDeleteFromDB);
+					console.warn("goalObjectToDeleteFromDB",goalObjectToDeleteFromDB);
 				},
 				error => console.warn(error)
 			);
