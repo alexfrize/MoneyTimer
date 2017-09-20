@@ -1,0 +1,29 @@
+ /* ================= Info modal styles ================= */
+
+.info-modal__close-button {
+	font-size: 14px;
+	float: right;
+	background: transparent;
+	border: none;
+	outline: 0;
+	color: #673ab7;
+	margin-top: -10px;
+	margin-right: -16px;
+}
+
+.info-modal__close-button:hover {
+	cursor: pointer;
+	color: #d1c4e9;
+}
+
+.info-modal__close-button, .modal__close-button:hover {
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
+	transition: 0.5s;
+}
+
+.info-modal__button-container {
+	text-align: center;
+	margin: 10px auto 20px;
+}

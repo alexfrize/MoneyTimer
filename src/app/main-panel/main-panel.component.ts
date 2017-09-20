@@ -1,4 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { MdDialog, MdDialogRef } from '@angular/material';
+import { InfoModalComponent } from 'app/info-modal/info-modal.component';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Rx';
 
@@ -22,11 +24,12 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private workedOutToday_buttonTitle : string = 'Start';
   private workedOutToday_buttonColor : string  = 'warn';
   private ifTimerIsWorking_counter : number = 0;
+  private infoDialogIsShowing : boolean = false;
 
   @Input() hourlySalary : number;
   @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
   @Output() updateProgressBars_event : EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor () {
+  constructor (public infoModal : MdDialog) {
   	let now = moment().format("HH:mm:ss");
   	console.log(now);
   }
@@ -55,26 +58,19 @@ export class MainPanelComponent implements OnInit, OnChanges {
     
     let SHOW_MODAL_AFTER_N_SECONDS = 10;
 
-    switch (this.workedOutToday_buttonTitle) {
-      case "Start":
-        this.ifTimerIsWorking_counter++;
-        if (this.ifTimerIsWorking_counter > SHOW_MODAL_AFTER_N_SECONDS) {
-          alert("You didn't start the timer! Please don't forget to start it")
-          this.ifTimerIsWorking_counter = 0;
-        }
-        break;
-
-      case "Continue":
-        this.ifTimerIsWorking_counter++;
-        if (this.ifTimerIsWorking_counter > SHOW_MODAL_AFTER_N_SECONDS) {
-          alert("Please don't forget to press 'Continue' button to start timer again")
-          this.ifTimerIsWorking_counter = 0;
-        }
-        break;        
-      
-      default:
+    if (this.workedOutToday_buttonTitle === "Start" || this.workedOutToday_buttonTitle === "Continue") {
+      this.ifTimerIsWorking_counter++;
+      if (this.ifTimerIsWorking_counter > SHOW_MODAL_AFTER_N_SECONDS && !this.infoDialogIsShowing) {
+        let infoModalRef = this.infoModal.open(InfoModalComponent);
+        this.infoDialogIsShowing = true;
+        infoModalRef.afterClosed().subscribe(result => {
+          this.infoDialogIsShowing = false;
+        });
         this.ifTimerIsWorking_counter = 0;
-        break;
+      }
+    }
+    else {
+        this.ifTimerIsWorking_counter = 0;
     }
   }
 

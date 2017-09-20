@@ -12,6 +12,9 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from '@angular/material';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-crop-modal.component';
+import { InfoModalComponent } from 'app/info-modal/info-modal.component';
+
+
 
 
 @NgModule({
@@ -22,9 +25,10 @@ import { ImgCropModalComponent } from 'app/new-goal-modal/img-crop-modal/img-cro
     NewGoalModalComponent,
     AllGoalsPanelComponent,
     ImageCropperComponent,
-    ImgCropModalComponent
+    ImgCropModalComponent,
+    InfoModalComponent
   ],
-  entryComponents: [NewGoalModalComponent, ImgCropModalComponent],
+  entryComponents: [NewGoalModalComponent, ImgCropModalComponent, InfoModalComponent],
   imports: [
     BrowserModule,
     FormsModule,
