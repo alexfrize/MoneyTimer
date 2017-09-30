@@ -1,4 +1,5 @@
 import { IGoal } from './goals.interface';
+import { IFinishedGoal } from './finishedgoals.interface';
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -14,13 +15,22 @@ export class GoalsService {
 
   }
 
-  loadAllGoals() : Observable<IGoal[]> {
+  loadCurrentGoals() : Observable<IGoal[]> {
     var _url="/api/getallgoals";
     return this._http.get(_url)
     .map((response:Response) => <IGoal[]>response.json())
     .do(data => JSON.stringify(data));
   }
-  
+
+  /* ========================================================================================================== */  
+  loadFinishedGoals() {
+    var _url="/api/getfinishedgoals";
+    return this._http.get(_url)
+    .map((response:Response) => <IGoal[]>response.json())
+    .do(data => JSON.stringify(data));
+  }
+
+
   /* ========================================================================================================== */
   saveGoalToDB(goalObject : IGoal) : Observable<Response> {
         var _url = "/api/savenewgoal";
@@ -33,7 +43,20 @@ export class GoalsService {
           { headers }
         ).map(res => res.json())
         .catch(this.handleError);;
-      
+  }
+
+  /* ========================================================================================================== */
+  saveFinishedGoalToDB(finishedGoalObject : IGoal) : Observable<Response> {
+        var _url = "/api/savefinishedgoal";
+        var headers = new Headers({
+          'Content-Type': 'application/json'
+        });
+        return this._http.post(
+          _url,
+          JSON.stringify(finishedGoalObject),
+          { headers }
+        ).map(res => res.json())
+        .catch(this.handleError);;
   }
   
   /* ========================================================================================================== */

@@ -34,26 +34,44 @@
 	color: #673ab7;
 }
 
-.allGoalsPanel__goalElement {
+.finishedGoalsPanel__goalTitle {
+	color: grey;
+}
+
+.allGoalsPanel__goalElement, .finishedGoalsPanel__goalElement {
 	background: white;
 	margin-top: 10px;
 	padding: 30px 10px;
 	border: 1px solid #673ab7; 
 }
 
-.allGoalsPanel__goalElement_description {
+.finishedGoalsPanel__goalElement {
+	border: 1px solid grey; 
+}
+
+.allGoalsPanel__goalElement_description, .finishedGoalsPanel__goalElement_description {
 	font-size: 18px;
 	font-weight: 300;
 }
+
+.finishedGoalsPanel__goalElement_description {
+	color: grey;
+}
+
 
 .allGoalsPanel__goalElement_percent_complete {
 	font-weight: 400;
 }
 
-.allGoalsPanel__priority {
+.allGoalsPanel__priority, .finishedGoalsPanel__priority {
 	font-size: 12px;
 	font-weight: 300;
 }
+
+.finishedGoalsPanel__priority {
+	color: grey;
+}
+
 
 .allGoalsPanel__status {
 	font-size: 12px;
@@ -72,8 +90,15 @@
 	max-width: 150px;
 }
 
+.finishedGoalsPanel__goalElement_img {
+	max-width: 150px;
+}
+
 @media (min-width : 992px ) {
 	.allGoalsPanel__goalElement_img {
+		max-width: 120px;
+	}
+	.finishedGoalsPanel__goalElement_img {
 		max-width: 120px;
 	}
 }
@@ -82,6 +107,9 @@
 	.allGoalsPanel__goalElement_img {
 		max-width: 150px;
 	}
+	.finishedGoalsPanel__goalElement_img {
+		max-width: 150px;
+	}	
 }
 
 .allGoalsPanel__goalElement__edit-button {
@@ -96,7 +124,7 @@
 	color: #673ab7;
 }
 
-.allGoalsPanel__goalElement__delete-button {
+.allGoalsPanel__goalElement__delete-button, .finishedGoalsPanel__goalElement__delete-button {
 	-moz-transition: 0.5s;
 	-webkit-transition: 0.5s;
 	-o-transition: 0.5s;
@@ -108,7 +136,7 @@
 	color: #673ab7;
 }
 
-.allGoalsPanel__goalElement__edit-button:hover, .allGoalsPanel__goalElement__delete-button:hover {
+.allGoalsPanel__goalElement__edit-button:hover, .allGoalsPanel__goalElement__delete-button:hover, .finishedGoalsPanel__goalElement__delete-button:hover {
 	cursor: pointer;
 	color: #d1c4e9;
 }

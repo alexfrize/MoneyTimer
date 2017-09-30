@@ -3,6 +3,7 @@ import { DragulaService } from '../../../node_modules/ng2-dragula';
 
 import { GoalsService } from '../connect-to-server/goals.service';
 import { IGoal } from '../connect-to-server/goals.interface';
+import { IFinishedGoal } from '../connect-to-server/finishedgoals.interface';
 
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.component';
@@ -56,6 +57,21 @@ export class AllGoalsPanelComponent {
 		}
 	}
 
+	/* ================  Saves finished goal object to DB ================ */
+	saveFinishedGoalToDB(finishedGoalObject) {
+		this.goalsService.saveFinishedGoalToDB(finishedGoalObject)
+			.subscribe(
+				result => {
+					// let _id = result;
+					// var goalObjectToSaveToArray = Object.assign({ _id } , finishedGoalObject)
+					// console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
+
+					// this.goals.push(goalObjectToSaveToArray);					
+				},
+				error => console.error(error)
+			);		
+	}
+
 	/* ================  Updates progress bars when element in goals array moves ================ */
 	updateProgress() {
 		// console.log("updateProgress()");
@@ -73,8 +89,14 @@ export class AllGoalsPanelComponent {
  				this.goals[i].dollarsComplete = salary_ms*(this.timeWorkedOutToday_milliseconds - this.timeWorkedOutToday_milliseconds_lastSave) * this.goals[i].percentToSave/100 + this.goals[i].dollarsComplete_lastSave;  // * KOEFF == this.goals[i].percentToSave
 				this.goals[i].percentComplete = Math.round(this.goals[i].dollarsComplete * 100/this.goals[i].goalPrice);
 				if (this.goals[i].dollarsComplete >= this.goals[i].goalPrice) {
-					this.finishedGoals.push(this.goals[i]);
-					this.goals.splice(i,1);
+					let finishedGoalObject = Object.assign({}, this.goals[i]);
+					delete finishedGoalObject.dollarsComplete_lastSave;
+					delete finishedGoalObject.dollarsComplete;
+					delete finishedGoalObject.percentComplete;
+					console.log("\r\n\r\n\r\n\r\n\r\n\r\nfinishedGoalObject\r\n\r\n\r\n\r\n\r\n",finishedGoalObject);
+					this.finishedGoals.push(finishedGoalObject);
+					this.saveFinishedGoalToDB(finishedGoalObject);
+					this.deleteExistingGoal(i);
 					this.updateIndexes();
 				}
 			}
@@ -126,7 +148,7 @@ export class AllGoalsPanelComponent {
 
 
 	ngOnInit() {
-		this.goalsService.loadAllGoals()
+		this.goalsService.loadCurrentGoals()
 		.subscribe(
     		goals => this.goals = goals.sort((a, b) => {
     			return (a.priority <= b.priority) ? -1 : 1;
@@ -134,6 +156,15 @@ export class AllGoalsPanelComponent {
     		error => console.error(error),
     		() => console.warn("this.goals === ",this.goals)
     );
+
+		this.goalsService.loadFinishedGoals()
+		.subscribe(
+    		finishedGoals => this.finishedGoals = finishedGoals.sort((a, b) => {
+    			return (a.priority <= b.priority) ? -1 : 1;
+    		}),
+    		error => console.error(error),
+    		() => console.warn("this.finishedGoals === ",this.finishedGoals)
+    );    
 	}
 
 	showAllGoals_onclick() {

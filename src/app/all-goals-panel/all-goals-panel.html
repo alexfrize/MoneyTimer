@@ -35,7 +35,32 @@
 			</div>
 		</div>
 	</div>
-	<div *ngIf="showCurrentOrFinished==='current'" class="col-md-12 allGoalsPanel__button-container">
+
+	<h4 *ngIf="showCurrentOrFinished==='finished'">Finished goals</h4>
+	<div *ngIf="showCurrentOrFinished==='finished'">
+		<div class="col-md-12" *ngFor="let finishedGoal of finishedGoals; let i = index" >
+		<div *ngIf="showAllGoals || i<3" class="finishedGoalsPanel__goalElement col-md-12">
+				
+				<p (click)="_INSERT_FUNCTION_THAT_REMOVES_FINISHED_GOAL_FROM_ARCHIVE_AND_DB()" class="finishedGoalsPanel__goalElement__delete-button"><span class="glyphicon glyphicon-remove"></span></p>
+				<div class="row">
+					<div class="col-md-4">
+						<img class="center-block img-responsive finishedGoalsPanel__goalElement_img" [src]="getGoalImage(finishedGoal)">
+					</div>
+					<div class="col-md-8">
+							<h4 class="finishedGoalsPanel__goalTitle">{{ finishedGoal.goalTitle }} : {{ finishedGoal.goalPrice }}$</h4>
+							<p class="finishedGoalsPanel__priority">
+								You saved {{finishedGoal.percentToSave}}% of income for this goal
+							</p>
+							<p class="finishedGoalsPanel__goalElement_description">
+								{{ finishedGoal.goalDescription }}
+							</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-12 allGoalsPanel__button-container">
 		<form class="text-right">
 			<button md-raised-button (click)="showAllGoals_onclick()" color="primary">{{getButtonMoreLessGoalsText()}}</button>
 		</form>
