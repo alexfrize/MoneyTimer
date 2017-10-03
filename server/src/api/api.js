@@ -4,6 +4,8 @@ var mongojs = require('mongojs');
 var ObjectId = require('mongodb').ObjectID;
 
 var db = mongojs("moneytimer", ["goals"]);
+var dbFinished = mongojs("moneytimer", ["finished"]);
+var dbSettings = mongojs("moneytimer", ["settings"]);
 
 // ============================== Load all goals ==============================
 router.get("/api/getallgoals", function(req, res) {
@@ -11,6 +13,48 @@ router.get("/api/getallgoals", function(req, res) {
       res.json(data);
     }
   );
+});
+
+// ============================== Load finished goals ==============================
+router.get("/api/getfinishedgoals", function(req, res) {
+  dbFinished.finished.find((err, data) => {
+      res.json(data);
+    }
+  );
+});
+
+// ============================== Load settings ==============================
+router.get("/api/loadsettings", function(req, res) {
+  dbSettings.settings.findOne((err, data) => {
+      res.json(data);
+      console.log("load settings: ", data);
+    }
+  );
+});
+
+// ============================== Save settings DB ==============================
+router.put("/api/savesettings", function(req, res) {
+  console.log("SAVE SETTINGS");
+  var _id;
+  console.log(req.body.totalEarnings);
+  console.log(req.body.hourlySalary);
+  console.log(req.body.day);
+  dbSettings.settings.findOne((err, data) => {
+      _id = data._id;
+      console.log("_id===", _id);
+      dbSettings.settings.update({ _id },
+        { 
+          $set : { 
+              totalEarnings : req.body.totalEarnings,
+              hourlySalary: req.body.hourlySalary,
+              day: req.body.day
+          }
+        });
+      res.send("SETTINGS WERE SAVED");
+    }
+  );
+
+
 });
 
 // ============================== Save goal object ==============================
@@ -25,6 +69,19 @@ router.post("/api/savenewgoal", function(req, res) {
   res.send(_id);
 });
 
+// ============================== Save finished goal object ==============================
+router.post("/api/savefinishedgoal", function(req, res) {
+  console.log("req.body === ", req.body);
+  // var _id = ObjectId();
+  // console.log("_id : ", _id);
+  var objToSave = Object.assign({ }, req.body);
+  console.log("objToSave : ", objToSave);
+  
+  dbFinished.finished.insert(objToSave);
+  var cnt = dbFinished.finished.count({});
+  console.log("cnt==",cnt);
+  res.json({"OK" : "Finished goal saved"});
+});
 
 // ============================== Save changes to goal object in DB ==============================
 router.put("/api/savegoalchanges", function(req, res) {

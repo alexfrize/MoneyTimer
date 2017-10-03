@@ -26,7 +26,7 @@ export class GoalsService {
   loadFinishedGoals() {
     var _url="/api/getfinishedgoals";
     return this._http.get(_url)
-    .map((response:Response) => <IGoal[]>response.json())
+    .map((response:Response) => <IFinishedGoal[]>response.json())
     .do(data => JSON.stringify(data));
   }
 
@@ -56,7 +56,7 @@ export class GoalsService {
           JSON.stringify(finishedGoalObject),
           { headers }
         ).map(res => res.json())
-        .catch(this.handleError);;
+        .catch(this.handleError);
   }
   
   /* ========================================================================================================== */
@@ -101,6 +101,7 @@ export class GoalsService {
         return this._http.delete(_url)
         .catch(this.handleError);
   }
+
   /* ========================================================================================================== */
   handleError(error : Response) : any {
     console.error("ERROR: ", error);

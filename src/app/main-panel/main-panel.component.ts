@@ -1,13 +1,15 @@
 import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { InfoModalComponent } from 'app/info-modal/info-modal.component';
+import { SettingsService } from '../connect-to-server/settings.service';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Rx';
 
 @Component ({
   selector: 'main-panel',
   templateUrl: 'main-panel.html',
-  styleUrls: ['main-panel.css']
+  styleUrls: ['main-panel.css'],
+  providers: [SettingsService]
 })
 export class MainPanelComponent implements OnInit, OnChanges {
 
@@ -25,13 +27,15 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private workedOutToday_buttonColor : string  = 'warn';
   private ifTimerIsWorking_counter : number = 0;
   private infoDialogIsShowing : boolean = false;
+  private day : number = 1;
 
   @Input() hourlySalary : number;
   @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
   @Output() updateProgressBars_event : EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor (public infoModal : MdDialog) {
+  constructor (public infoModal : MdDialog, private settingsService : SettingsService) {
   	let now = moment().format("HH:mm:ss");
   	console.log(now);
+    this.loadTotalEarningsAndDayFromDB();
   }
   
   ngOnInit(){
@@ -114,7 +118,30 @@ export class MainPanelComponent implements OnInit, OnChanges {
 /* ========================= Updates DB, saves current state ========================= */
   saveStateToDB() {
     console.log("saveStateToDB(): saving state...");
+    let settingsObject = {
+      hourlySalary : this.hourlySalary,
+      totalEarnings : this.totalEarnings,
+      day : this.day
+    }
+    console.log("settingsObject === ", settingsObject);
+    this.settingsService.saveSettings(settingsObject)
+      .subscribe(
+        result => console.log("==> saveStateToDB()::result === ", result),
+        error => console.error(error)
+      );
   }
+    
+  
 
+/* ========================= Load state from DB and assings previous_totalEarnings to the value loaded from DB ========================= */
+  loadTotalEarningsAndDayFromDB() {
+    console.log("loadStateFromDB(): loading state...");
+    let settingsObject = {};
+    this.settingsService.loadSettings().subscribe(
+      settings => {
+        this.day = +settings.day;
+        this.previous_totalEarnings = +settings.totalEarnings;
+    });
+  }
 }
 

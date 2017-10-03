@@ -59,6 +59,7 @@ export class AllGoalsPanelComponent {
 
 	/* ================  Saves finished goal object to DB ================ */
 	saveFinishedGoalToDB(finishedGoalObject) {
+		console.log("saveFinishedGoalToDB(finishedGoalObject)::finishedGoalObject == ", finishedGoalObject);
 		this.goalsService.saveFinishedGoalToDB(finishedGoalObject)
 			.subscribe(
 				result => {
@@ -66,7 +67,8 @@ export class AllGoalsPanelComponent {
 					// var goalObjectToSaveToArray = Object.assign({ _id } , finishedGoalObject)
 					// console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
 
-					// this.goals.push(goalObjectToSaveToArray);					
+					// this.goals.push(goalObjectToSaveToArray);
+					console.log("")					
 				},
 				error => console.error(error)
 			);		

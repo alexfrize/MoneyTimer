@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { NewGoalModalComponent } from 'app/new-goal-modal/new-goal-modal.component';
+import { SettingsService } from '../connect-to-server/settings.service';
 
 @Component({
 	selector: 'settings-panel',
 	templateUrl: 'settings-panel.html',
-	styleUrls: ['settings-panel.css']
+	styleUrls: ['settings-panel.css'],
+  providers: [SettingsService]
 })
 
 export class SettingsPanelComponent implements OnInit {
@@ -20,8 +22,7 @@ export class SettingsPanelComponent implements OnInit {
   @Output() newGoalAdded : EventEmitter<any> = new EventEmitter<any>();
 
   ngOnInit() {
-    this.hourlySalary = 40;
-    this.salaryUpdated.emit(this.hourlySalary);  
+    this.loadSettingsFromDB();
   }
 
   validateHourlySalary() {
@@ -29,7 +30,7 @@ export class SettingsPanelComponent implements OnInit {
   }
 
 /* ========================= Init modal dialog window ========================= */	
-  constructor(public dialog: MdDialog) {
+  constructor(public dialog: MdDialog, private settingsService : SettingsService) {
 
   }
   
@@ -58,4 +59,16 @@ export class SettingsPanelComponent implements OnInit {
       if (this.newGoalObject) this.newGoalAdded.emit(this.newGoalObject);
     });
   }
+
+/* ========================= Load state from DB and assings previous_totalEarnings to the value loaded from DB ========================= */
+  loadSettingsFromDB() {
+    console.log("loadStateFromDB(): loading state...");
+    let settingsObject = {};
+    this.settingsService.loadSettings().subscribe(
+      settings => {
+        this.hourlySalary = +settings.hourlySalary;
+        this.salaryUpdated.emit(this.hourlySalary); 
+    });
+  }
+
 }
