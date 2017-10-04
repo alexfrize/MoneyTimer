@@ -28,6 +28,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private ifTimerIsWorking_counter : number = 0;
   private infoDialogIsShowing : boolean = false;
   private day : number = 1;
+  private timer;
 
   @Input() hourlySalary : number;
   @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
@@ -39,8 +40,8 @@ export class MainPanelComponent implements OnInit, OnChanges {
   }
   
   ngOnInit(){
-    let timer = Observable.interval(1000);
-    timer.subscribe(t => {
+    this.timer = Observable.interval(1000);
+    this.timer.subscribe(t => {
     	this.updateWorkingHours();
     	this.updateMoneyTimer();
       this.updateTimeWorkedOutToday_event.emit(this.timeWorkedOutToday_milliseconds);
@@ -142,6 +143,12 @@ export class MainPanelComponent implements OnInit, OnChanges {
         this.day = +settings.day;
         this.previous_totalEarnings = +settings.totalEarnings;
     });
+  }
+  /* ========================= Finishes workin day, unsubscribes from all observables ========================= */
+  finishWorkingDay() {
+    this.day++;
+    this.saveStateToDB();
+    if (this.workedOutToday_buttonTitle == "Pause") this.startOrPauseTimer();
   }
 }
 
