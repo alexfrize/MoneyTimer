@@ -44,6 +44,7 @@ export class SettingsPanelComponent implements OnInit {
 			console.log("hourlySalary is OK");
 			this.salaryUpdated.emit(this.hourlySalary);
 			this.editSalaryButton_title = 'Edit';
+      this.saveNewSalarytoDB();
 		}
 
 	}
@@ -69,6 +70,20 @@ export class SettingsPanelComponent implements OnInit {
         this.hourlySalary = +settings.hourlySalary;
         this.salaryUpdated.emit(this.hourlySalary); 
     });
+  }
+
+  /* ========================= Save salary to DB ========================= */
+  saveNewSalarytoDB() {
+    let salaryObject = {
+      hourlySalary : this.hourlySalary,
+    }
+    console.log("Saving salary::salaryObject === ", salaryObject);
+    
+    this.settingsService.saveSalaryToDB(salaryObject)
+      .subscribe(
+        result => console.log("==> saveStateToDB()::result === ", result),
+        error => console.error(error)
+      );
   }
 
 }

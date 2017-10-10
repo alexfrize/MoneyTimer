@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { InfoModalComponent } from 'app/info-modal/info-modal.component';
+import { InfoModalComponent } from '../info-modal/info-modal.component';
 import { SettingsService } from '../connect-to-server/settings.service';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Rx';
@@ -22,7 +22,6 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private totalEarnings : number = 0;
   private previous_totalEarnings : number = 0; // later it loads from DB
   private ticks = 0;
-  private TMP = 30; //30$ в час - удалить и импортировать из другого класса
   private workedOutToday_buttonTitle : string = 'Start';
   private workedOutToday_buttonColor : string  = 'warn';
   private ifTimerIsWorking_counter : number = 0;
@@ -58,17 +57,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
   }
   
   ngOnChanges() {
-  	this.TMP = this.hourlySalary;
     console.log("ngOnChanges(): this.hourlySalary==", this.hourlySalary);
-    if ((this.previous_hourlySalary !== this.hourlySalary)) {
-      //if (this.previous_hourlySalary !== undefined) {
-        console.log("this.previous_hourlySalary",this.previous_hourlySalary);
-        console.log("this.hourlySalary",this.hourlySalary);
-      //}
-      this.previous_hourlySalary = this.hourlySalary;
-
-      //this.saveStateToDB();
-    }
   }
 
   /* Checks, if Money timer is working or not. Shows modal if not */
@@ -119,9 +108,8 @@ export class MainPanelComponent implements OnInit, OnChanges {
 
 /* ========================= Updates money timer ========================= */
   updateMoneyTimer() {
-  	let incomePerSecond = this.TMP/3600;
-  	this.income = Math.floor(this.timeWorkedOutToday_milliseconds*incomePerSecond/1000);
-  	this.totalEarnings = this.income + this.previous_totalEarnings;
+  	this.income = Math.floor(this.timeWorkedOutToday_milliseconds*this.hourlySalary/3600000);
+  	this.totalEarnings = this.income;
   }
 
 /* ========================= Updates DB, saves current state ========================= */
@@ -134,12 +122,14 @@ export class MainPanelComponent implements OnInit, OnChanges {
       timeWorkedOutToday_milliseconds : this.timeWorkedOutToday_milliseconds
     }
     console.warn("settingsObject === ", settingsObject);
+    //this.previous_timeWorkedOutToday_milliseconds
+    
     this.settingsService.saveSettings(settingsObject)
       .subscribe(
         result => console.log("==> saveStateToDB()::result === ", result),
         error => console.error(error)
       );
-    //this.saveAllProgress_event.emit(true);
+    this.saveAllProgress_event.emit(true);
   }
 
 /* ========================= Load state from DB and assings previous_totalEarnings to the value loaded from DB ========================= */
@@ -150,8 +140,11 @@ export class MainPanelComponent implements OnInit, OnChanges {
       settings => {
         this.day = +settings.day;
         this.previous_totalEarnings = +settings.totalEarnings;
+        this.totalEarnings = +settings.totalEarnings;
         this.previous_timeWorkedOutToday_milliseconds = +settings.timeWorkedOutToday_milliseconds;
+        this.timeWorkedOutToday_milliseconds = +settings.timeWorkedOutToday_milliseconds;
         this.timeWorkedOutToday_string = moment.utc(this.previous_timeWorkedOutToday_milliseconds).format('HH:mm:ss');
+        console.warn(settings);
     });
   }
 

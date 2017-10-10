@@ -1,4 +1,5 @@
 import { ISettings } from './settings.interface';
+import { ISalary } from './salary.interface';
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -36,6 +37,20 @@ export class SettingsService {
   }
 
   /* ========================================================================================================== */
+  saveSalaryToDB(salaryObject : ISalary) : Observable<Response> {
+        var _url = "/api/savesalary";
+        var headers = new Headers({
+          'Content-Type': 'application/json'
+        });
+        return this._http.put(
+          _url,
+          JSON.stringify(salaryObject),
+          { headers }
+        ).catch(this.handleError__save_salary);
+  }
+
+
+  /* ========================================================================================================== */
   handleError__load(error : Response) : any {
     console.error("SETTINGS LOAD ERROR: ", error);
   }  
@@ -45,4 +60,8 @@ export class SettingsService {
     console.error("SETTINGS SAVE ERROR: ", error);
   }  
 
+  /* ========================================================================================================== */
+  handleError__save_salary(error : Response) : any {
+    console.error("SALARY SAVE ERROR: ", error);
+  }  
 }

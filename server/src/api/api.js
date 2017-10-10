@@ -55,10 +55,26 @@ router.put("/api/savesettings", function(req, res) {
       res.send("SETTINGS WERE SAVED");
     }
   );
-
-
 });
 
+// ============================== Save salary to DB ==============================
+router.put("/api/savesalary", function(req, res) {
+  console.log("SAVE SALARY");
+  var _id;
+  console.log(req.body.hourlySalary);
+  dbSettings.settings.findOne((err, data) => {
+      _id = data._id;
+      console.log("_id===", _id);
+      dbSettings.settings.update({ _id },
+        { 
+          $set : { 
+              hourlySalary : req.body.hourlySalary,
+          }
+        });
+      res.send("New salary was saved!");
+    }
+  );
+});
 // ============================== Save goal object ==============================
 router.post("/api/savenewgoal", function(req, res) {
   console.log("req.body === ", req.body);
