@@ -12,6 +12,7 @@ export class AppComponent {
   private editExistingGoalObject: any = undefined;
   private showAllGoals = false;
   private updateProgressBar_counter : number = 0;
+  private saveProgressEventTrigger : boolean = false;
 /* ========================= When hourlySalary is updated ========================= */
   onSalaryUpdated(newHourlySalary : number) {
   	this.newHourlySalary = newHourlySalary;
@@ -39,8 +40,12 @@ export class AppComponent {
   }
 
   onUpdateProgressBars_event(progressBarEventObject : any) {
-     //console.log("onUpdateProgressBars_event($event)");
      this.updateProgressBar_counter++;
+  }
+
+  onSaveAllProgress_event(saveProgressEventTrigger : boolean) {
+    console.log( "onSaveAllProgress_event");
+    this.saveProgressEventTrigger = !this.saveProgressEventTrigger; 
   }
 
   getLeftColumnCSSClass() {

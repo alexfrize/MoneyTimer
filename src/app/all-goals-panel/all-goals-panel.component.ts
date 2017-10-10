@@ -21,6 +21,8 @@ export class AllGoalsPanelComponent {
 	@Input() timeWorkedOutToday_milliseconds : number;
 	@Input() hourlySalary : number;
 	private hourlySalary_lastSave : number;
+	@Input() saveProgressEventTrigger : boolean;
+	private saveProgressEventTrigger_prev : boolean = true;
 	@Input() updateProgressBar_counter : number;
 	@Output() showAllGoals_event : EventEmitter<boolean> = new EventEmitter<boolean>();
 	private updateProgressBar_counter_prev : number;
@@ -63,12 +65,7 @@ export class AllGoalsPanelComponent {
 		this.goalsService.saveFinishedGoalToDB(finishedGoalObject)
 			.subscribe(
 				result => {
-					// let _id = result;
-					// var goalObjectToSaveToArray = Object.assign({ _id } , finishedGoalObject)
-					// console.warn("goalObjectToSaveToArray", goalObjectToSaveToArray);
-
-					// this.goals.push(goalObjectToSaveToArray);
-					console.log("")					
+					console.log(result);
 				},
 				error => console.error(error)
 			);		
@@ -76,9 +73,6 @@ export class AllGoalsPanelComponent {
 
 	/* ================  Updates progress bars when element in goals array moves ================ */
 	updateProgress() {
-		// console.log("updateProgress()");
-		// console.log("ALLGOALS::timeWorkedOutToday_milliseconds ===", this.timeWorkedOutToday_milliseconds);
-
 		for (let i=0; i<this.goals.length; i++) {
 			if (!this.goals[i].dollarsComplete_lastSave) {
 				this.goals[i].dollarsComplete_lastSave = this.goals[i].dollarsComplete;
@@ -114,14 +108,9 @@ export class AllGoalsPanelComponent {
 
 		console.log("updateIndexes()");
 		this.timeWorkedOutToday_milliseconds_lastSave = this.timeWorkedOutToday_milliseconds;
-		//console.log("this.timeWorkedOutToday_milliseconds_lastSave",this.timeWorkedOutToday_milliseconds_lastSave);
 		for (let i=0; i < this.goals.length; i++) {
-			// console.log("this.goals[i].priority", this.goals[i].priority);
 			this.goals[i].priority = i;
 			this.goals[i].dollarsComplete_lastSave = this.goals[i].dollarsComplete;
-			//console.log("this.goals[i].dollarsComplete_lastSave == ", this.goals[i].dollarsComplete_lastSave);
-			// console.log("this.goals[i].dollarsComplete==",this.goals[i].dollarsComplete);
-			// console.log("this.goals[i].priority::up", this.goals[i].priority);
 		}
 		this.updateAllGoalsIndexesAndDollarsCompleteInDB();
 	}
@@ -226,12 +215,18 @@ export class AllGoalsPanelComponent {
 			this.updateProgressBar_counter_prev = this.updateProgressBar_counter;
 			this.updateProgress();
 		}
-	
+
+		// === if saveProgressEvent occurs ===
+		if (this.saveProgressEventTrigger_prev !== this.saveProgressEventTrigger) {
+			this.saveProgressEventTrigger_prev = this.saveProgressEventTrigger;
+			this.updateIndexes();
+		}
+	 
 	}
 
 /* ========================= Saves changes to existing object ========================= */
 	saveChanges(goalObj : any) {
-		console.log("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n =========================SaveCahnges() : 201");
+		console.log("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n =========================SaveCahnges() : 228");
 		console.log("Saving existing object!", goalObj);
 
 		console.log('ID!!!', goalObj._id);
@@ -291,11 +286,6 @@ export class AllGoalsPanelComponent {
 
 /* ========================= Returns percents of active using income ========================= */
 	editExistingGoal(goalObject : any) {
-		// console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
-		// console.log("=========================");
-		// console.log(goalObject);
-		// console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
-		// console.log("=========================");
 		
 		this.updateIndexes(); // Saves current state to DB
 
@@ -316,18 +306,12 @@ export class AllGoalsPanelComponent {
 
 /* ========================= Deletes goal ========================= */
 	deleteExistingGoal(goalNum : number) {
-		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
-		console.log("=====DELETE====================");
-		console.log(this.goals[goalNum]);
-		console.log("\r\n\r\n\r\n\r\n\r\n\r\n");
-		console.log("=========================");
 		let objectToDelete = this.goals[goalNum];
 		this.goals.splice(goalNum,1);
 		this.deleteGoalFromDB(objectToDelete);
 	}
 
 	deleteGoalFromDB(goalObjectToDeleteFromDB : IGoal) {
-
 		this.goalsService.deleteGoalFromDB(goalObjectToDeleteFromDB)
 			.subscribe(
 				result => {
@@ -338,4 +322,23 @@ export class AllGoalsPanelComponent {
 			);
 
 	}
+
+/* ========================= Deletes finished goal from archive ========================= */
+	deleteFinishedGoal(goalNum : number) {
+		let objectToDelete = this.finishedGoals[goalNum];
+		this.finishedGoals.splice(goalNum,1);
+		this.deleteFinishedGoalFromDB(objectToDelete);
+	}
+
+	deleteFinishedGoalFromDB(goalObjectToDeleteFromDB : IGoal) {
+		this.goalsService.deleteFinishedGoalFromDB(goalObjectToDeleteFromDB)
+			.subscribe(
+				result => {
+					console.log("RESULT OF DELETE Finished goal from archive: ", result);
+					console.log("goalObjectToDeleteFromDB", goalObjectToDeleteFromDB);
+				},
+				error => console.warn(error)
+			);
+
+	}	
 }

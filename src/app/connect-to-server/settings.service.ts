@@ -22,7 +22,6 @@ export class SettingsService {
     .catch(this.handleError__load);
   }
 
-
   /* ========================================================================================================== */
   saveSettings(settingsObject : ISettings) : Observable<Response> {
         var _url = "/api/savesettings";

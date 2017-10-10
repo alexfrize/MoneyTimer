@@ -20,7 +20,7 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private timeWorkedOutToday_string : string = '00:00:00';  // change string -> number
   private income : number = 0;
   private totalEarnings : number = 0;
-  private previous_totalEarnings : number = 0; // later -> loads from DB
+  private previous_totalEarnings : number = 0; // later it loads from DB
   private ticks = 0;
   private TMP = 30; //30$ в час - удалить и импортировать из другого класса
   private workedOutToday_buttonTitle : string = 'Start';
@@ -31,8 +31,11 @@ export class MainPanelComponent implements OnInit, OnChanges {
   private timer;
 
   @Input() hourlySalary : number;
+  private previous_hourlySalary : number;
   @Output() updateTimeWorkedOutToday_event : EventEmitter<number> = new EventEmitter<number>();
   @Output() updateProgressBars_event : EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() saveAllProgress_event : EventEmitter<boolean> = new EventEmitter<boolean>();
+
   constructor (public infoModal : MdDialog, private settingsService : SettingsService) {
   	let now = moment().format("HH:mm:ss");
   	console.log(now);
@@ -47,18 +50,28 @@ export class MainPanelComponent implements OnInit, OnChanges {
       this.updateTimeWorkedOutToday_event.emit(this.timeWorkedOutToday_milliseconds);
       this.updateProgressBars_event.emit(true);
       this.checkIfTimerIsWorking();
-    	this.ticks = t});
-    // saves current state every 1 minute (60000 ms)
-    let saveState_timer = Observable.interval(60000);
+    	this.ticks = t;
+    });
+    const SAVE_STATE_EVERY_MS = 60000; // saves current state every 1 minute (60000 ms)
+    let saveState_timer = Observable.interval(SAVE_STATE_EVERY_MS);
     saveState_timer.subscribe(t => this.saveStateToDB());
   }
   
   ngOnChanges() {
   	this.TMP = this.hourlySalary;
     console.log("ngOnChanges(): this.hourlySalary==", this.hourlySalary);
+    if ((this.previous_hourlySalary !== this.hourlySalary)) {
+      //if (this.previous_hourlySalary !== undefined) {
+        console.log("this.previous_hourlySalary",this.previous_hourlySalary);
+        console.log("this.hourlySalary",this.hourlySalary);
+      //}
+      this.previous_hourlySalary = this.hourlySalary;
+
+      //this.saveStateToDB();
+    }
   }
 
-/* Checkes, if Money timer is working or not. Shows modal if not */
+  /* Checks, if Money timer is working or not. Shows modal if not */
   checkIfTimerIsWorking() {
     
     let SHOW_MODAL_AFTER_N_SECONDS = 10;
@@ -98,13 +111,10 @@ export class MainPanelComponent implements OnInit, OnChanges {
   }
 /* ========================= Updates working hours (timeWorkedOutToday variable) ========================= */
   updateWorkingHours() {
-
   	if (this.workedOutToday_buttonTitle == "Pause") {
 	  	this.timeWorkedOutToday_milliseconds = moment().diff(this.startingTime) + this.previous_timeWorkedOutToday_milliseconds;
 	  	this.timeWorkedOutToday_string = moment.utc(this.timeWorkedOutToday_milliseconds).format('HH:mm:ss');
   	}
-  	// console.log(this.timeWorkedOutToday_string);
-  	// console.log("this.ticks",this.ticks);
   }
 
 /* ========================= Updates money timer ========================= */
@@ -112,8 +122,6 @@ export class MainPanelComponent implements OnInit, OnChanges {
   	let incomePerSecond = this.TMP/3600;
   	this.income = Math.floor(this.timeWorkedOutToday_milliseconds*incomePerSecond/1000);
   	this.totalEarnings = this.income + this.previous_totalEarnings;
-  	// console.log(this.timeWorkedOutToday_string);
-  	// console.log("income",this.income);
   }
 
 /* ========================= Updates DB, saves current state ========================= */
@@ -122,17 +130,17 @@ export class MainPanelComponent implements OnInit, OnChanges {
     let settingsObject = {
       hourlySalary : this.hourlySalary,
       totalEarnings : this.totalEarnings,
-      day : this.day
+      day : this.day,
+      timeWorkedOutToday_milliseconds : this.timeWorkedOutToday_milliseconds
     }
-    console.log("settingsObject === ", settingsObject);
+    console.warn("settingsObject === ", settingsObject);
     this.settingsService.saveSettings(settingsObject)
       .subscribe(
         result => console.log("==> saveStateToDB()::result === ", result),
         error => console.error(error)
       );
+    //this.saveAllProgress_event.emit(true);
   }
-    
-  
 
 /* ========================= Load state from DB and assings previous_totalEarnings to the value loaded from DB ========================= */
   loadTotalEarningsAndDayFromDB() {
@@ -142,11 +150,17 @@ export class MainPanelComponent implements OnInit, OnChanges {
       settings => {
         this.day = +settings.day;
         this.previous_totalEarnings = +settings.totalEarnings;
+        this.previous_timeWorkedOutToday_milliseconds = +settings.timeWorkedOutToday_milliseconds;
+        this.timeWorkedOutToday_string = moment.utc(this.previous_timeWorkedOutToday_milliseconds).format('HH:mm:ss');
     });
   }
-  /* ========================= Finishes workin day, unsubscribes from all observables ========================= */
+
+  /* ========================= Finishes working day, unsubscribes from all observables ========================= */
   finishWorkingDay() {
     this.day++;
+    this.timeWorkedOutToday_milliseconds = 0;
+    this.previous_timeWorkedOutToday_milliseconds = 0;
+    this.previous_timeWorkedOutToday_milliseconds = this.timeWorkedOutToday_milliseconds;
     this.saveStateToDB();
     if (this.workedOutToday_buttonTitle == "Pause") this.startOrPauseTimer();
   }

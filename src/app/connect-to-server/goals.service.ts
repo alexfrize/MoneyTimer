@@ -89,15 +89,18 @@ export class GoalsService {
        
   }
 
-
+  /* ========================================================================================================== */
   deleteGoalFromDB(goalObject : IGoal) : Observable<Response> {
         var _url = "/api/deletegoal" + "?id=" + goalObject._id;
+        console.log("DELETE: goalObject._id ===", goalObject._id);
+        return this._http.delete(_url)
+        .catch(this.handleError);
+  }
 
-        // var headers = new Headers({
-        //   'Content-Type': 'application/json'
-        // });
-        console.warn("DELETE: goalObject._id ===", goalObject._id);
-
+  /* ========================================================================================================== */
+  deleteFinishedGoalFromDB(goalObject : IGoal) : Observable<Response> {
+        var _url = "/api/deletefinishedgoal" + "?id=" + goalObject._id;
+        console.log("DELETE FROM ARCHIVE: goalObject._id ===", goalObject._id);
         return this._http.delete(_url)
         .catch(this.handleError);
   }

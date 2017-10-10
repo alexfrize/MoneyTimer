@@ -39,6 +39,7 @@ router.put("/api/savesettings", function(req, res) {
   console.log(req.body.totalEarnings);
   console.log(req.body.hourlySalary);
   console.log(req.body.day);
+  console.log(req.body.timeWorkedOutToday_milliseconds);
   dbSettings.settings.findOne((err, data) => {
       _id = data._id;
       console.log("_id===", _id);
@@ -46,8 +47,9 @@ router.put("/api/savesettings", function(req, res) {
         { 
           $set : { 
               totalEarnings : req.body.totalEarnings,
-              hourlySalary: req.body.hourlySalary,
-              day: req.body.day
+              hourlySalary : req.body.hourlySalary,
+              day : req.body.day,
+              timeWorkedOutToday_milliseconds : req.body.timeWorkedOutToday_milliseconds
           }
         });
       res.send("SETTINGS WERE SAVED");
@@ -123,6 +125,7 @@ router.put("/api/updateallgoalsindexes", function(req, res) {
   res.send("OK!");
 });
 
+// ============================== Deletes goal from database ==============================
 router.delete("/api/deletegoal", function(req, res) {
   console.log("DELETE:");
   var _id = req.query.id;
@@ -132,6 +135,17 @@ router.delete("/api/deletegoal", function(req, res) {
  
   res.send("deleted");
 });
+
+// ============================== Deletes finished goal from archive database ==============================
+router.delete("/api/deletefinishedgoal", function(req, res) {
+  console.log("DELETE FROM ARCHIVE:");
+  var _id = req.query.id;
+  console.log("Del object ID:", _id);
+  dbFinished.finished.remove({ _id :  _id }, { justOne: true });
+
+  res.send("deleted");
+});
+
 
 
 router.get("/", function(req, res) {
