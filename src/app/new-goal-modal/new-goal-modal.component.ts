@@ -19,10 +19,10 @@ export class NewGoalModalComponent {
   private modalTitle : string = 'Add new goal';
   private newGoalForm = new FormGroup({
     // Change everyting to 'null'
-    goalTitle : new FormControl("My new goal", Validators.required),
-    goalDescription : new FormControl("Any description"),
-    goalPrice : new FormControl("345", [ Validators.required, Validators.pattern(/^(\d+|\d+\.\d*)$/) ]),
-    percentToSave : new FormControl("25", Validators.pattern(/^(\d{1,2}|100|\d{1,2}\.\d{0,2})$/))
+    goalTitle : new FormControl(null, Validators.required),
+    goalDescription : new FormControl(null),
+    goalPrice : new FormControl(null, [ Validators.required, Validators.pattern(/^(\d+|\d+\.\d*)$/) ]),
+    percentToSave : new FormControl(null, Validators.pattern(/^(\d{1,2}|100|\d{1,2}\.\d{0,2})$/))
   });
   constructor(private dialogRef: MdDialogRef<NewGoalModalComponent>, public cropmodal: MdDialog) {
 
